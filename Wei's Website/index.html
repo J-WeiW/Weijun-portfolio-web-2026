@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weijun Wang | Creative Technologist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* === 核心变量与全局设置 === */
+        :root {
+            --bg: #151515; --accent: #FF8C73; --text: #E0E0E0;
+            --bento-bg: #1C1C1C; --bento-border: #2A2A2A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif; background-color: var(--bg); color: var(--text); overflow: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--bento-border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        ::selection { background-color: var(--accent); color: var(--bg); }
+
+        /* === 滚动吸附容器 === */
+        .scroll-container {
+            height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scroll-behavior: smooth;
+        }
+
+        .snap-section {
+            width: 100vw; min-height: 100vh; scroll-snap-align: start; scroll-snap-stop: always;
+            position: relative; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* === 导航栏 & 语言切换 === */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 1.5rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(to bottom, rgba(21,21,21,0.9), transparent); pointer-events: none;
+        }
+        .nav-logo { font-weight: 700; font-size: 1.25rem; pointer-events: auto; text-transform: uppercase; }
+        .nav-logo span { color: var(--accent); font-size: 0.875rem; margin-left: 0.5rem; }
+        
+        .nav-right { display: flex; gap: 2rem; pointer-events: auto; align-items: center; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.875rem; letter-spacing: 0.1em; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        
+        .lang-switch { display: flex; gap: 1rem; border-left: 1px solid var(--bento-border); padding-left: 1rem; }
+        .lang-switch button { 
+            background: none; border: none; color: rgba(224,224,224,0.5); 
+            font-family: inherit; font-size: 0.875rem; cursor: pointer; transition: color 0.3s;
+        }
+        .lang-switch button:hover, .lang-switch button.active { color: var(--accent); }
+
+        /* === 自定义音频播放器 UI === */
+        .audio-player {
+            position: fixed; bottom: 2rem; left: 2rem; z-index: 100;
+            background: rgba(21, 21, 21, 0.75); backdrop-filter: blur(12px);
+            border: 1px solid var(--bento-border); border-radius: 1rem;
+            padding: 1rem 1.25rem; width: 300px;
+            display: flex; flex-direction: column; gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: border-color 0.3s ease;
+        }
+        .audio-player:hover { border-color: rgba(255, 140, 115, 0.5); }
+        
+        .track-info { display: flex; justify-content: space-between; align-items: baseline; }
+        .song-title { font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .composer { font-family: monospace; font-size: 0.65rem; color: var(--accent); text-transform: uppercase; }
+        
+        /* 播放器控制行 */
+        .player-controls { display: flex; align-items: center; gap: 1rem; }
+        .play-btn { background: var(--text); color: var(--bg); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
+        .play-btn:hover { background: var(--accent); transform: scale(1.05); }
+        
+        /* 进度条与音量条通用样式 */
+        .slider-container { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
+        .time-text { font-family: monospace; font-size: 0.65rem; color: rgba(224,224,224,0.6); }
+        
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: var(--bento-border); border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 10px; width: 10px; border-radius: 50%; background: var(--accent); margin-top: -3px; transition: transform 0.2s; }
+        input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.3); }
+        
+        .volume-icon { color: rgba(224,224,224,0.8); font-size: 1.125rem; cursor: pointer; transition: color 0.2s; }
+        .volume-icon:hover { color: var(--accent); }
+
+        /* === 第一页：英雄区 === */
+        #hero { flex-direction: column; overflow: hidden; }
+        #canvas-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; opacity: 0.8; }
+        canvas { width: 100%; height: 100%; display: block; }
+        
+        .hero-center-box { position: relative; z-index: 10; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .sys-tag {
+            color: var(--accent); font-family: monospace; font-size: 0.875rem;
+            border: 1px solid rgba(255, 140, 115, 0.3); padding: 0.25rem 0.75rem; border-radius: 999px; text-transform: uppercase; margin-bottom: 1.5rem; backdrop-filter: blur(4px);
+        }
+        .hero-center-box h1 { font-size: clamp(4rem, 10vw, 8rem); line-height: 0.9; text-transform: uppercase; letter-spacing: -0.05em; }
+        .text-stroke { -webkit-text-stroke: 1px rgba(224, 224, 224, 0.4); color: transparent; transition: color 0.5s ease; }
+        .text-stroke:hover { color: var(--accent); }
+        
+        .hero-meta { margin-top: 2rem; font-family: monospace; font-size: 0.875rem; color: rgba(224, 224, 224, 0.6); text-transform: uppercase; line-height: 1.6; }
+        .scroll-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: rgba(224, 224, 224, 0.4); font-size: 1.5rem; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); } 40% { transform: translateY(-10px) translateX(-50%); } 60% { transform: translateY(-5px) translateX(-50%); } }
+
+        /* === 通用 Bento Box 排版 === */
+        section { padding: 6rem 2rem 2rem 2rem; align-items: flex-start; }
+        .bento-wrapper { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; height: 100%; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; grid-auto-rows: minmax(220px, auto); width: 100%; }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
+
+        .bento-item {
+            position: relative; background-color: var(--bento-bg); border: 1px solid var(--bento-border);
+            border-radius: 1rem; padding: 1.5rem; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: border-color 0.4s ease;
+            text-decoration: none; color: inherit;
+        }
+        
+        .bento-item.interactive { cursor: pointer; }
+        .bento-item.interactive:hover { border-color: rgba(255, 140, 115, 0.6); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10;}
+        
+        .media-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: #151515; overflow: hidden; }
+        .media-placeholder video, .media-placeholder img { 
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.3; 
+            transform: scale(1.01); transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease; 
+        }
+        .bento-item.interactive:hover .media-placeholder video, 
+        .bento-item.interactive:hover .media-placeholder img { opacity: 0.8; transform: scale(1.08); }
+        
+        .media-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(21,21,21,0.95) 0%, rgba(21,21,21,0.1) 100%); z-index: 1; pointer-events: none; transition: opacity 0.5s ease;}
+        .bento-item.interactive:hover .media-overlay { opacity: 0.6; }
+
+        .content-front { position: relative; z-index: 10; display: flex; flex-direction: column; height: 100%; justify-content: space-between; transform: translateY(5px); transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .bento-item.interactive:hover .content-front { transform: translateY(0); }
+
+        .col-span-1 { grid-column: span 1; } .col-span-2 { grid-column: span 2; } .col-span-3 { grid-column: span 3; } .col-span-4 { grid-column: span 4; }
+        .row-span-1 { grid-row: span 1; } .row-span-2 { grid-row: span 2; }
+
+        /* === 排版细节 === */
+        .tag { background: rgba(21,21,21,0.8); padding: 0.25rem 0.75rem; border-radius: 999px; font-family: monospace; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); width: fit-content; text-transform: uppercase; backdrop-filter: blur(4px);}
+        h3 { font-size: 1.75rem; line-height: 1.1; margin-bottom: 0.5rem; text-transform: uppercase; }
+        h4 { font-size: 1.25rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+        .subtext { color: rgba(224,224,224,0.6); font-family: monospace; font-size: 0.875rem; }
+        .bio-text { font-size: 1.125rem; line-height: 1.6; color: rgba(224,224,224,0.9); font-weight: 300; }
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+        .skill-tag { border: 1px solid var(--bento-border); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 0.75rem; background: var(--bg); }
+        .edu-item { border-bottom: 1px solid var(--bento-border); padding-bottom: 1rem; margin-bottom: 1rem; }
+        .edu-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .edu-school { font-weight: 700; font-size: 1rem; display: block; margin-bottom: 0.25rem;}
+        .cta-box { background-color: var(--accent); color: var(--bg); cursor: pointer; border: none; text-decoration: none;}
+        .cta-box h3 { font-size: 2rem; font-weight: 700; color: var(--bg); }
+        .icon-arrow { transition: transform 0.3s ease; background: var(--bg); color: var(--accent); padding: 0.5rem; border-radius: 50%; display: flex; }
+        .cta-box:hover .icon-arrow { transform: rotate(45deg); }
+
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: 1fr; grid-auto-rows: minmax(200px, auto); }
+            .col-span-1, .col-span-2, .row-span-2, .col-span-3, .col-span-4 { grid-column: span 1; grid-row: span 1; }
+            .nav-links { display: none; }
+            .snap-section { height: auto; scroll-snap-align: start; padding-top: 5rem; }
+            .audio-player { bottom: 1rem; left: 1rem; right: 1rem; width: auto; } /* 移动端自适应宽度 */
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
+
+    <div class="audio-player">
+        <div class="track-info">
+            <span class="song-title" data-i18n="songName">Midnight Windows</span>
+            <span class="composer">BY WEIJUN WANG</span>
+        </div>
+        
+        <div class="slider-container">
+            <span class="time-text" id="current-time">0:00</span>
+            <input type="range" id="progress-bar" value="0" max="100">
+            <span class="time-text" id="total-time">0:00</span>
+        </div>
+
+        <div class="player-controls">
+            <button class="play-btn" id="play-pause-btn">
+                <i class="ph-fill ph-play" id="play-icon"></i>
+            </button>
+            
+            <div class="slider-container" style="margin-left: 0.5rem;">
+                <i class="ph ph-speaker-high volume-icon" id="mute-btn"></i>
+                <input type="range" id="volume-bar" value="50" max="100" style="width: 80px;">
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-logo">WEIJUN WANG <span>// CREATIVE DEV</span></div>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="#hero" data-i18n="navHome">HOME</a>
+                <a href="#portfolio" data-i18n="navWork">WORK</a>
+                <a href="#about" data-i18n="navAbout">ABOUT</a>
+            </div>
+            <div class="lang-switch">
+                <button onclick="setLang('en')" id="btn-en" class="active">EN</button>
+                <button onclick="setLang('zh')" id="btn-zh">中</button>
+                <button onclick="setLang('fr')" id="btn-fr">FR</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="scroll-container" id="main-scroll">
+        <section id="hero" class="snap-section">
+            <div id="canvas-container">
+                <div style="position:absolute; inset:0; background: radial-gradient(circle at center, transparent, #151515 80%); z-index:5;"></div>
+                <canvas id="particle-canvas"></canvas>
+            </div>
+            <div class="hero-center-box">
+                <div class="sys-tag" data-i18n="sysTag">PORTFOLIO WEBSITE</div>
+                <h1><span data-i18n="title1">Creative</span><br><span class="text-stroke" data-i18n="title2">Technologist</span></h1>
+                <div class="hero-meta">
+                    <p data-i18n="subText">Bridging compelling visual storytelling<br>& advanced technical execution.</p>
+                    <p style="margin-top: 1rem; color: var(--accent);" data-i18n="locationText">BASED IN TORONTO, ON, CANADA</p>
+                </div>
+            </div>
+            <i class="ph ph-caret-down scroll-indicator"></i>
+        </section>
+
+        <section id="portfolio" class="snap-section">
+            <div class="bento-wrapper">
+                <div class="bento-grid">
+                    
+                    <a href="AI VIEW.html" class="bento-item col-span-2 row-span-2 reveal interactive">
+                        <div class="media-placeholder">
+                            <video src="assets/ai_view_preview.mp4" autoplay loop muted playsinline></video>
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag" data-i18n="featTag">FEATURED // WEB-BASED</span>
+                                <i class="ph ph-arrow-up-right" style="font-size:1.5rem; background:var(--accent); color:var(--bg); border-radius:50%; padding:4px;"></i>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 2.5rem;" data-i18n="proj1Title">The Algorithmic Umwelt</h3>
+                                <p class="subtext" data-i18n="proj1Sub">Interactive AI Vision & Point-cloud Simulation</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="assets/Particle Time Distortion.mp4" target="_blank" class="bento-item col-span-2 row-span-2 reveal delay-1 interactive">
+                        <div class="media-placeholder">
+                            <video src="assets/Particle Time Distortion.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag">HOUDINI VFX // FULLSCREEN PREVIEW</span>
+                                <i class="ph ph-arrows-out" style="font-size:1.5rem; background:var(--accent); color:var(--bg); border-radius:50%; padding:4px;"></i>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 2.5rem;" data-i18n="proj3Title">Simulation & Objectivity</h3>
+                                <p class="subtext" data-i18n="proj3Sub">Particle Time Distortion & Reassembly</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
+                        <div class="media-placeholder">
+                            <img src="assets/Dust Bunny Preview.png">
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <span class="tag">UNITY 3D & C#</span>
+                            <div>
+                                <h3 data-i18n="proj2Title">Dust Bunny</h3>
+                                <p class="subtext" data-i18n="proj2Sub">3D Character Controller & Game Mechanics</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
+                        <div class="media-placeholder">
+                            <video src="assets/Boba UFO.mp4" autoplay loop muted playsinline style="object-position: center;">
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <span class="tag">C# DEV & UNITY</span>
+                            <div>
+                                <h3 style="font-size: 1.25rem;" data-i18n="proj5Title">Boba UFO</h3>
+                                <p class="subtext" data-i18n="proj5Sub">Interactive Physics & Game Logic</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="snap-section">
+            <div class="bento-wrapper">
+                <div class="bento-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    
+                    <div class="bento-item col-span-2 row-span-1 reveal">
+                        <h4 data-i18n="aboutTitle">ABOUT ME</h4>
+                        <p class="bio-text" data-i18n="bioText">
+                            Multidisciplinary Creative Technologist bridging compelling visual storytelling with advanced technical execution. Adept at crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, complemented by a robust foundation in graphic and brand design. Passionate about leveraging a versatile skill set—from 3D simulation to interactive media—to solve complex creative challenges in a dynamic studio environment.
+                        </p>
+                    </div>
+
+                    <a href="Weijun_Wang_Resume.pdf" target="_blank" class="bento-item col-span-1 row-span-1 cta-box reveal delay-1 interactive">
+                        <div class="content-front">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-direction: column; height: 100%;">
+                                <div class="icon-arrow" style="align-self: flex-end;"><i class="ph ph-arrow-up-right" style="font-size: 2.5rem;"></i></div>
+                                <h3><span data-i18n="ctaTitle1">DOWNLOAD</span><br><span data-i18n="ctaTitle2">RESUME</span></h3>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="bento-item col-span-1 row-span-2 reveal delay-1">
+                        <i class="ph ph-cpu" style="color: var(--accent); font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4 data-i18n="stackTitle">Technical Skills</h4>
+                        <div class="skills-grid" style="margin-top: 1rem;">
+                            <span class="skill-tag">Unity</span> <span class="skill-tag">Unreal Engine</span>
+                            <span class="skill-tag">Houdini</span> <span class="skill-tag">AI Scripting</span>
+                            <span class="skill-tag">Procedural Animation</span> <span class="skill-tag">Physical Simulation</span>
+                            <span class="skill-tag">Interactive Media</span> <span class="skill-tag">Adobe Creative Suite</span>
+                            <span class="skill-tag">Typography</span> <span class="skill-tag">Rapid Prototyping</span>
+                        </div>
+                    </div>
+
+                    <div class="bento-item col-span-2 row-span-2 reveal delay-2">
+                        <i class="ph ph-student" style="color: var(--accent); font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4 data-i18n="eduTitle">Education & Background</h4>
+                        
+                        <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
+                            <div class="edu-item" style="border-bottom: 1px solid var(--bento-border); padding-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                    <span class="edu-school" data-i18n="edu1School" style="font-size: 1.25rem;">OCAD University | Toronto</span>
+                                    <span class="subtext" style="color: var(--accent);">Exp. May 2026</span>
+                                </div>
+                                <span style="font-size: 1rem; color: rgba(224,224,224,0.8);" data-i18n="edu1Deg">Bachelor of Design, Digital Futures</span>
+                            </div>
+                            <div class="edu-item" style="border: none;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                    <span class="edu-school" data-i18n="edu2School" style="font-size: 1.25rem;">George Brown College | Toronto</span>
+                                    <span class="subtext">May 2023</span>
+                                </div>
+                                <span style="font-size: 1rem; color: rgba(224,224,224,0.8);" data-i18n="edu2Deg">Advanced Diploma, Graphic & Digital Design</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <footer style="position: absolute; bottom: 1.5rem; width: 100%; text-align: center;">
+            </footer>
+        </section>
+        
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                navHome: "HOME", navWork: "WORK", navAbout: "ABOUT",
+                songName: "Midnight Windows",
+                sysTag: "PORTFOLIO WEBSITE", title1: "Creative", title2: "Technologist",
+                subText: "Bridging compelling visual storytelling<br>& advanced technical execution.",
+                locationText: "BASED IN TORONTO, ON, CANADA",
+                featTag: "FEATURED // WEB-BASED",
+                proj1Title: "The Algorithmic Umwelt", proj1Sub: "Interactive AI Vision & Point-cloud Simulation",
+                proj2Title: "Dust Bunny", proj2Sub: "3D Character Controller & Game Mechanics",
+                proj3Title: "Simulation & Objectivity", proj3Sub: "Particle Time Distortion & Reassembly",
+                proj5Title: "Boba UFO", proj5Sub: "Interactive Physics & Game Logic",
+                aboutTitle: "ABOUT ME",
+                bioText: "Multidisciplinary Creative Technologist bridging compelling visual storytelling with advanced technical execution. Adept at crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, complemented by a robust foundation in graphic and brand design. Passionate about leveraging a versatile skill set—from 3D simulation to interactive media—to solve complex creative challenges in a dynamic studio environment.",
+                stackTitle: "Technical Skills", eduTitle: "Education & Background",
+                edu1School: "OCAD University | Toronto", edu1Deg: "Bachelor of Design, Digital Futures",
+                edu2School: "George Brown College | Toronto", edu2Deg: "Advanced Diploma, Graphic & Digital Design",
+                ctaTitle1: "DOWNLOAD", ctaTitle2: "RESUME"
+            },
+            zh: {
+                navHome: "首页", navWork: "作品", navAbout: "关于",
+                songName: "午夜之窗",
+                sysTag: "个人作品集", title1: "创意", title2: "技术专家",
+                subText: "连接极具吸引力的视觉叙事<br>与高级技术执行。",
+                locationText: "位于加拿大安大略省多伦多",
+                featTag: "精选项目 // 网页交互",
+                proj1Title: "算法环境界", proj1Sub: "交互式 AI 视觉与点云模拟",
+                proj2Title: "灰尘精灵", proj2Sub: "3D 角色控制器与游戏机制",
+                proj3Title: "模拟与客观性", proj3Sub: "粒子时间破碎与重组模拟",
+                proj5Title: "波霸 UFO", proj5Sub: "C# 游戏机制与交互物理",
+                aboutTitle: "关于我",
+                bioText: "跨学科创意技术人员，致力于将极具吸引力的视觉叙事与高级技术执行相连接。熟练使用 Unity、虚幻引擎和 Houdini 打造沉浸式互动体验，并拥有扎实的平面与品牌设计基础。热衷于在充满活力的工作室环境中，利用从 3D 模拟到互动媒体的综合技能，解决复杂的创意挑战。",
+                stackTitle: "技术栈", eduTitle: "教育与背景",
+                edu1School: "安大略艺术设计大学 (OCAD)", edu1Deg: "设计学士，数字未来专业",
+                edu2School: "乔治布朗学院", edu2Deg: "高级文凭，平面与数字设计",
+                ctaTitle1: "下载", ctaTitle2: "个人简历"
+            },
+            fr: {
+                navHome: "ACCUEIL", navWork: "PROJETS", navAbout: "À PROPOS",
+                songName: "Fenêtres de Minuit",
+                sysTag: "PORTFOLIO EN LIGNE", title1: "Créatif", title2: "Technologue",
+                subText: "Allier narration visuelle captivante<br>& exécution technique avancée.",
+                locationText: "BASÉ À TORONTO, ON, CANADA",
+                featTag: "PROJET PHARE // WEB",
+                proj1Title: "L'Umwelt Algorithmique", proj1Sub: "Vision IA Interactive & Nuage de Points",
+                proj2Title: "Dust Bunny", proj2Sub: "Contrôleur 3D & Mécaniques de Jeu",
+                proj3Title: "Simulation & Objectivité", proj3Sub: "Distorsion Temporelle et Réassemblage de Particules",
+                proj5Title: "Boba UFO", proj5Sub: "Physique Interactive & Logique de Jeu",
+                aboutTitle: "À PROPOS DE MOI",
+                bioText: "Technologue créatif multidisciplinaire qui allie une narration visuelle captivante à une exécution technique avancée. Expert dans la création d'expériences interactives immersives utilisant Unity, Unreal Engine et Houdini. Passionné par l'utilisation d'un ensemble de compétences polyvalentes pour résoudre des défis créatifs complexes.",
+                stackTitle: "Compétences Techniques", eduTitle: "Éducation",
+                edu1School: "Université OCAD | Toronto", edu1Deg: "Baccalauréat en Design, Futurs Numériques",
+                edu2School: "Collège George Brown | Toronto", edu2Deg: "Diplôme Avancé, Design Graphique & Numérique",
+                ctaTitle1: "TÉLÉCHARGER", ctaTitle2: "LE CV"
+            }
+        };
+
+        function setLang(lang) {
+            document.querySelectorAll('.lang-switch button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${lang}`).classList.add('active');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+        }
+
+        // --- 2. 音乐播放器逻辑 ---
+        const audio = document.getElementById('bgm');
+        
+        // 在代码加载时，立刻将音频底层音量设置为 0.5 (即 50%)
+        audio.volume = 0.5;
+
+        const playBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const volumeBar = document.getElementById('volume-bar');
+        const muteBtn = document.getElementById('mute-btn');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+        
+        let isPlaying = false;
+        let hasAutoPlayed = false;
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                playIcon.classList.replace('ph-pause', 'ph-play');
+            } else {
+                audio.play();
+                playIcon.classList.replace('ph-play', 'ph-pause');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        playBtn.addEventListener('click', () => {
+            hasAutoPlayed = true;
+            togglePlay();
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            progressBar.max = audio.duration;
+            totalTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            progressBar.value = audio.currentTime;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        progressBar.addEventListener('input', () => {
+            audio.currentTime = progressBar.value;
+        });
+
+        volumeBar.addEventListener('input', () => {
+            audio.volume = volumeBar.value / 100;
+            updateVolumeIcon();
+        });
+
+        muteBtn.addEventListener('click', () => {
+            if (audio.volume > 0) {
+                audio.dataset.savedVolume = audio.volume;
+                audio.volume = 0;
+                volumeBar.value = 0;
+            } else {
+                audio.volume = audio.dataset.savedVolume || 0.5; // 恢复默认回到 50%
+                volumeBar.value = audio.volume * 100;
+            }
+            updateVolumeIcon();
+        });
+
+        function updateVolumeIcon() {
+            muteBtn.className = 'ph volume-icon ' + 
+                (audio.volume === 0 ? 'ph-speaker-none' : 
+                 audio.volume < 0.5 ? 'ph-speaker-low' : 'ph-speaker-high');
+        }
+
+        function attemptAutoPlay() {
+            if (!hasAutoPlayed && !isPlaying) {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    hasAutoPlayed = true;
+                    playIcon.classList.replace('ph-play', 'ph-pause');
+                }).catch((error) => {
+                    console.log("Autoplay blocked by browser. User must interact first.");
+                });
+            }
+        }
+
+        window.addEventListener('wheel', attemptAutoPlay, { once: true });
+        window.addEventListener('touchstart', attemptAutoPlay, { once: true });
+        window.addEventListener('click', attemptAutoPlay, { once: true });
+
+        // --- 3. Scroll Reveal 滚动揭示动画 ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('active'); } 
+                else { entry.target.classList.remove('active'); }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 4. 背景粒子特效动画 ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let animationFrameId, particles = [];
+            const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+            window.addEventListener('resize', resize); resize();
+
+            for (let i = 0; i < 2000; i++) {
+                const x = (Math.random() - 0.5) * 800, z = (Math.random() - 0.5) * 800;
+                const y = Math.sin(x * 0.01) * Math.cos(z * 0.01) * 100;
+                const isAccent = Math.random() > 0.95;
+                particles.push({ x, y, z, baseY: y, color: isAccent ? '#FF8C73' : 'rgba(224, 224, 224, 0.15)', size: isAccent ? 2 : 1, phase: Math.random() * Math.PI * 2 });
+            }
+
+            let angleY = 0, angleX = 0.3, time = 0;
+            const render = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const cx = canvas.width / 2, cy = canvas.height / 2, fl = 400;
+                angleY += 0.002; time += 0.02;
+                const cosY = Math.cos(angleY), sinY = Math.sin(angleY), cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.y = p.baseY + Math.sin(time + p.phase) * 15;
+                    let rx = p.x * cosY - p.z * sinY, rz = p.z * cosY + p.x * sinY;
+                    let ry = p.y * cosX - rz * sinX, rz2 = rz * cosX + p.y * sinX + 500;
+                    if (rz2 > 0) {
+                        const scale = fl / rz2;
+                        ctx.beginPath(); ctx.arc(cx + rx * scale, cy + ry * scale, p.size * scale, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color; ctx.fill();
+                    }
+                }
+                animationFrameId = window.requestAnimationFrame(render);
+            };
+            render();
+        });
+    </script>
+</body>
+</html>
