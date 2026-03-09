@@ -110,7 +110,6 @@
         .bento-wrapper { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; height: 100%; }
         .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; grid-auto-rows: minmax(220px, auto); width: 100%; }
         
-        /* 第三页特有网格布局 (桌面端) */
         .about-grid { grid-template-columns: repeat(3, 1fr); }
 
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
@@ -140,7 +139,6 @@
         .content-front { position: relative; z-index: 10; display: flex; flex-direction: column; height: 100%; justify-content: space-between; transform: translateY(5px); transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .bento-item.interactive:hover .content-front { transform: translateY(0); }
 
-        /* 网格跨度类 */
         .col-span-1 { grid-column: span 1; } .col-span-2 { grid-column: span 2; } .col-span-3 { grid-column: span 3; } .col-span-4 { grid-column: span 4; }
         .row-span-1 { grid-row: span 1; } .row-span-2 { grid-row: span 2; }
 
@@ -154,7 +152,6 @@
         .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
         .skill-tag { border: 1px solid var(--bento-border); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 0.75rem; background: var(--bg); }
         
-        /* 第三页提取的样式类，方便媒体查询控制 */
         .edu-item { border-bottom: 1px solid var(--bento-border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
         .edu-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .edu-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 0.25rem; }
@@ -166,59 +163,32 @@
         .cta-box h3 { font-size: 2rem; font-weight: 700; color: var(--bg); margin-top: auto;}
         .cta-box:hover .cta-icon { transform: rotate(45deg); }
 
-        /* ==================================================================
-           🚨 响应式媒体查询：移动端 / 小窗口深度优化 🚨
-           ================================================================== */
+        /* === 响应式优化 === */
         @media (max-width: 900px) {
-            
-            /* 1. 禁用强制的 Scroll Snapping，让长页面在手机上自由顺滑滚动 */
             .scroll-container { scroll-snap-type: none; overflow-x: hidden; }
             .snap-section { height: auto; min-height: auto; scroll-snap-align: none; padding: 6rem 1rem 2rem 1rem; }
             #hero { min-height: 100vh; padding: 0; }
-
-            /* 2. 导航栏简化 */
             nav { padding: 1rem 1.5rem; }
             .nav-logo { font-size: 1rem; }
             .nav-logo span { display: none; }
             .nav-links { display: none; } 
             .lang-switch { border-left: none; padding-left: 0; }
-
-            /* 3. Bento 网格变为单列瀑布流 */
             .bento-grid { grid-template-columns: 1fr !important; gap: 1rem; grid-auto-rows: auto; }
-            
-            /* 强制所有卡片在手机端占满1列 */
             .col-span-1, .col-span-2, .col-span-3, .col-span-4 { grid-column: span 1; }
             .row-span-1, .row-span-2 { grid-row: span 1; }
-            
-            /* 🎯 解决第三页巨大留白的核心：区分高度 */
-            #portfolio .bento-item { min-height: 300px; } /* 第二页作品保留高度 */
-            #about .bento-item { min-height: auto; padding: 1.25rem; } /* 第三页文本自适应，无多余留白 */
-
-            /* 4. 第三页 (About) 移动端精细化排版 */
-            
-            /* 下载简历按钮：由巨大的方块变成横向紧凑的行动按钮 */
+            #portfolio .bento-item { min-height: 300px; }
+            #about .bento-item { min-height: auto; padding: 1.25rem; }
             .cta-content { flex-direction: row-reverse; align-items: center; justify-content: space-between; }
             .cta-box h3 { font-size: 1.25rem; margin: 0; line-height: 1.2; }
             .cta-icon { align-self: center; padding: 0.4rem; }
             .cta-icon i { font-size: 1.5rem !important; }
-
-            /* 教育背景：学校名称和日期变成上下结构，防止挤压 */
             .edu-header { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
             .edu-school { font-size: 1rem; }
             .edu-item { padding-bottom: 1rem; margin-bottom: 1rem; }
-            
-            /* 技能标签：缩小字体和间距以容纳更多词条 */
             .skills-grid { gap: 0.35rem; }
             .skill-tag { padding: 0.25rem 0.4rem; font-size: 0.65rem; }
-
-            /* 5. 音乐播放器变为屏幕底部的控制栏 */
-            .audio-player { 
-                bottom: 1rem; left: 1rem; right: 1rem; width: calc(100% - 2rem); 
-                border-radius: 0.75rem; padding: 0.75rem 1rem;
-            }
-            #volume-bar { display: none; } /* 手机端隐藏音量条以节省空间 */
-            
-            /* 关闭悬停上浮特效，防止手机端误触导致屏幕闪烁 */
+            .audio-player { bottom: 1rem; left: 1rem; right: 1rem; width: calc(100% - 2rem); border-radius: 0.75rem; padding: 0.75rem 1rem; }
+            #volume-bar { display: none; }
             .content-front { transform: none !important; transition: none; } 
             .scroll-indicator { display: none; } 
         }
@@ -289,7 +259,7 @@
             <div class="bento-wrapper">
                 <div class="bento-grid">
                     
-                    <a href="ai-view.html" class="bento-item col-span-2 row-span-2 reveal interactive">
+                    <a href="ai-view.html" target="_blank" class="bento-item col-span-2 row-span-2 reveal interactive">
                         <div class="media-placeholder">
                             <video src="assets/ai_view_preview.mp4" autoplay loop muted playsinline></video>
                             <div class="media-overlay"></div>
@@ -339,7 +309,7 @@
 
                     <a href="#" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
                         <div class="media-placeholder">
-                            <video src="assets/Boba UFO.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
+                            <video src="assets/Boba UFO.mp4" autoplay loop muted playsinline style="object-position: center;">
                             <div class="media-overlay"></div>
                         </div>
                         <div class="content-front">
@@ -487,7 +457,7 @@
 
         // --- 2. 音乐播放器逻辑 ---
         const audio = document.getElementById('bgm');
-        audio.volume = 0.5; // 初始音量设为50%
+        audio.volume = 0.5;
 
         const playBtn = document.getElementById('play-pause-btn');
         const playIcon = document.getElementById('play-icon');
