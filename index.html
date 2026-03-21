@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Weijun Wang | Digital Media Artist</title>
+    <title>Weijun Wang | Multidisciplinary Digital Media Artist</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -97,7 +97,7 @@
             color: var(--accent); font-family: monospace; font-size: 0.875rem;
             border: 1px solid rgba(255, 140, 115, 0.3); padding: 0.25rem 0.75rem; border-radius: 999px; text-transform: uppercase; margin-bottom: 1.5rem; backdrop-filter: blur(4px);
         }
-        .hero-center-box h1 { font-size: clamp(3.5rem, 10vw, 8rem); line-height: 0.9; text-transform: uppercase; letter-spacing: -0.05em; }
+        .hero-center-box h1 { font-size: clamp(3.5rem, 9vw, 7rem); line-height: 0.9; text-transform: uppercase; letter-spacing: -0.05em; }
         .text-stroke { -webkit-text-stroke: 1px rgba(224, 224, 224, 0.4); color: transparent; transition: color 0.5s ease; }
         .text-stroke:hover { color: var(--accent); }
         
@@ -144,11 +144,21 @@
 
         /* === 排版细节 === */
         .tag { background: rgba(21,21,21,0.8); padding: 0.25rem 0.75rem; border-radius: 999px; font-family: monospace; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); width: fit-content; text-transform: uppercase; backdrop-filter: blur(4px);}
-        h3 { font-size: 1.75rem; line-height: 1.1; margin-bottom: 0.5rem; text-transform: uppercase; }
+        h3 { font-size: 1.75rem; line-height: 1.1; margin-bottom: 0.2rem; text-transform: uppercase; }
         h4 { font-size: 1.25rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
-        .subtext { color: rgba(224,224,224,0.6); font-family: monospace; font-size: 0.875rem; }
+        .subtext { color: rgba(224,224,224,0.6); font-family: monospace; font-size: 0.875rem; margin-bottom: 0.5rem;}
         .bio-text { font-size: 1rem; line-height: 1.6; color: rgba(224,224,224,0.9); font-weight: 300; }
         
+        /* === PDF 详情按钮样式 === */
+        .pdf-btn {
+            display: inline-flex; align-items: center; gap: 0.4rem; margin-top: auto; padding: 0.4rem 0.8rem;
+            background: rgba(21, 21, 21, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px; font-family: monospace; font-size: 0.7rem; font-weight: bold;
+            color: var(--text); text-decoration: none; transition: all 0.3s ease;
+            backdrop-filter: blur(4px); width: fit-content; z-index: 20;
+        }
+        .pdf-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); transform: translateY(-2px); }
+
         .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
         .skill-tag { border: 1px solid var(--bento-border); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 0.75rem; background: var(--bg); }
         
@@ -222,7 +232,7 @@
     </div>
 
     <nav>
-        <div class="nav-logo">WEIJUN WANG <span>// CREATIVE DEV</span></div>
+        <div class="nav-logo">WEIJUN WANG <span>// DIGITAL ARTIST</span></div>
         <div class="nav-right">
             <div class="nav-links">
                 <a href="#hero" data-i18n="navHome">HOME</a>
@@ -246,7 +256,7 @@
             </div>
             <div class="hero-center-box">
                 <div class="sys-tag" data-i18n="sysTag">PORTFOLIO WEBSITE</div>
-                <h1><span data-i18n="title1">Creative</span><br><span class="text-stroke" data-i18n="title2">Technologist</span></h1>
+                <h1><span data-i18n="title1">Digital Media</span><br><span class="text-stroke" data-i18n="title2">Artist</span></h1>
                 <div class="hero-meta">
                     <p data-i18n="subText">Bridging compelling visual storytelling<br>& advanced technical execution.</p>
                     <p style="margin-top: 1rem; color: var(--accent);" data-i18n="locationText">BASED IN TORONTO, ON, CANADA</p>
@@ -259,7 +269,7 @@
             <div class="bento-wrapper">
                 <div class="bento-grid">
                     
-                    <a href="ai-view.html" target="_blank" class="bento-item col-span-2 row-span-2 reveal interactive">
+                    <div onclick="window.open('ai-view.html', '_blank')" class="bento-item col-span-2 row-span-2 reveal interactive">
                         <div class="media-placeholder">
                             <video src="assets/ai_view_preview.mp4" autoplay loop muted playsinline></video>
                             <div class="media-overlay"></div>
@@ -269,14 +279,17 @@
                                 <span class="tag" data-i18n="featTag">WEB-BASE // PREVIEW</span>
                                 <i class="ph ph-arrow-up-right" style="font-size:1.5rem; background:var(--accent); color:var(--bg); border-radius:50%; padding:4px;"></i>
                             </div>
-                            <div>
+                            <div style="display: flex; flex-direction: column;">
                                 <h3 style="font-size: 2.25rem;" data-i18n="proj1Title">The Algorithmic Umwelt</h3>
                                 <p class="subtext" data-i18n="proj1Sub">Interactive AI Vision & Point-cloud Simulation</p>
+                                <a href="assets/ai_view_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    </div>
 
-                    <a href="assets/particle time distortion.mp4" target="_blank" class="bento-item col-span-2 row-span-2 reveal delay-1 interactive">
+                    <div onclick="window.open('assets/particle time distortion.mp4', '_blank')" class="bento-item col-span-2 row-span-2 reveal delay-1 interactive">
                         <div class="media-placeholder">
                             <video src="assets/particle time distortion.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
@@ -286,40 +299,96 @@
                                 <span class="tag">HOUDINI VFX // PREVIEW</span>
                                 <i class="ph ph-arrows-out" style="font-size:1.5rem; background:var(--accent); color:var(--bg); border-radius:50%; padding:4px;"></i>
                             </div>
-                            <div>
+                            <div style="display: flex; flex-direction: column;">
                                 <h3 style="font-size: 2.25rem;" data-i18n="proj3Title">Simulation & Objectivity</h3>
                                 <p class="subtext" data-i18n="proj3Sub">Particle Time Distortion & Reassembly</p>
+                                <a href="assets/houdini_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    </div>
 
-                    <a href="#" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
+                    <div onclick="window.open('assets/Dust Bunny Preview.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
                         <div class="media-placeholder">
                             <video src="assets/Dust Bunny Preview.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
                         </div>
                         <div class="content-front">
-                            <span class="tag">UNITY 3D & C# // PREVIEW</span>
-                            <div>
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag">UNITY 3D & C# // PREVIEW</span>
+                                <i class="ph ph-arrow-up-right" style="font-size:1.2rem; color:var(--text);"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
                                 <h3 data-i18n="proj2Title">Dust Bunny</h3>
                                 <p class="subtext" data-i18n="proj2Sub">3D Character Controller & Game Mechanics</p>
+                                <a href="assets/dust_bunny_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    </div>
 
-                    <a href="#" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
+                    <div onclick="window.open('assets/Boba UFO.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
                         <div class="media-placeholder">
                             <video src="assets/Boba UFO.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
                         </div>
                         <div class="content-front">
-                            <span class="tag">C# DEV & UNITY // PREVIEW</span>
-                            <div>
-                                <h3 style="font-size: 1.25rem;" data-i18n="proj5Title">Boba UFO</h3>
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag">C# DEV & UNITY // PREVIEW</span>
+                                <i class="ph ph-arrow-up-right" style="font-size:1.2rem; color:var(--text);"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <h3 data-i18n="proj5Title">Boba UFO</h3>
                                 <p class="subtext" data-i18n="proj5Sub">Interactive Physics & Game Logic</p>
+                                <a href="assets/boba_ufo_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    </div>
+
+                    <div onclick="window.open('assets/Rainday Toronto.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-3 interactive">
+                        <div class="media-placeholder">
+                            <video src="assets/Rainday Toronto.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag">UNREAL ENGINE 5 // CINEMATIC</span>
+                                <i class="ph ph-arrow-up-right" style="font-size:1.2rem; color:var(--text);"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <h3 data-i18n="proj7Title">Rainy Night Toronto</h3>
+                                <p class="subtext" data-i18n="proj7Sub">Real-time Rendering & Environment Art</p>
+                                <a href="assets/ue5_cinematic_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div onclick="window.open('assets/graphic_design.pdf', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
+                        <div class="media-placeholder">
+                            <img src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop" alt="Graphic Design">
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag">BRANDING & UI/UX // DESIGN</span>
+                                <i class="ph ph-arrow-up-right" style="font-size:1.2rem; color:var(--text);"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <h3 data-i18n="proj6Title">Brand Identity & Design</h3>
+                                <p class="subtext" data-i18n="proj6Sub">Typography, Packaging & Visual Storytelling</p>
+                                <a href="assets/graphic_design_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -331,7 +400,7 @@
                     <div class="bento-item col-span-2 row-span-1 reveal">
                         <h4 data-i18n="aboutTitle">ABOUT ME</h4>
                         <p class="bio-text" data-i18n="bioText">
-                            Hi there! I'm Weijun, a Digital Media Artist who loves bridging the gap between bold visual storytelling and deep technical execution. I spend my time crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, backed by a solid foundation in graphic and brand design. I'm always excited to explore new mediums—from 3D simulation to generative systems—and I'm looking for a dynamic studio where I can help solve complex creative challenges.
+                            Hi there! I'm Weijun, a Multidisciplinary Digital Media Artist who loves bridging the gap between bold visual storytelling and deep technical execution. I spend my time crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, backed by a solid foundation in graphic and brand design. I'm always excited to explore new mediums—from 3D simulation to generative systems—and I'm looking for a dynamic studio where I can help solve complex creative challenges.
                         </p>
                     </div>
 
@@ -348,8 +417,8 @@
                         <i class="ph ph-cpu" style="color: var(--accent); font-size: 2rem; margin-bottom: 1rem;"></i>
                         <h4 data-i18n="stackTitle">Technical Skills</h4>
                         <div class="skills-grid" style="margin-top: 1rem;">
-                            <span class="skill-tag">Unity</span> <span class="skill-tag">Unreal Engine</span>
-                            <span class="skill-tag">Houdini</span> <span class="skill-tag">Scripting</span>
+                            <span class="skill-tag">Unity</span> <span class="skill-tag">Unreal Engine 5</span>
+                            <span class="skill-tag">Houdini</span> <span class="skill-tag">C# Scripting</span>
                             <span class="skill-tag">Procedural Animation</span> <span class="skill-tag">Physical Simulation</span>
                             <span class="skill-tag">Interactive Media</span> <span class="skill-tag">Adobe Creative Suite</span>
                             <span class="skill-tag">Typography</span> <span class="skill-tag">Rapid Prototyping</span>
@@ -393,16 +462,19 @@
             en: {
                 navHome: "HOME", navWork: "WORK", navAbout: "ABOUT",
                 songName: "Midnight Windows",
-                sysTag: "PORTFOLIO WEBSITE", title1: "Creative", title2: "Technologist",
+                sysTag: "PORTFOLIO WEBSITE", title1: "Digital Media", title2: "Artist",
                 subText: "Bridging compelling visual storytelling<br>& advanced technical execution.",
                 locationText: "BASED IN TORONTO, ON, CANADA",
                 featTag: "WEB-BASED // PREVIEW",
+                pdfBtn: "VIEW DETAILS PDF",
                 proj1Title: "The Algorithmic Umwelt", proj1Sub: "Interactive AI Vision & Point-cloud Simulation",
                 proj2Title: "Dust Bunny", proj2Sub: "3D Character Controller & Game Mechanics",
                 proj3Title: "Simulation & Objectivity", proj3Sub: "Particle Time Distortion & Reassembly",
                 proj5Title: "Boba UFO", proj5Sub: "Interactive Physics & Game Logic",
+                proj6Title: "Brand Identity & Design", proj6Sub: "Typography, Packaging & Visual Storytelling",
+                proj7Title: "UE5 Cinematic Short", proj7Sub: "Real-time Rendering & Environment Art",
                 aboutTitle: "ABOUT ME",
-                bioText: "Hi there! I'm Weijun, a creative technologist who loves bridging the gap between bold visual storytelling and deep technical execution. I spend my time crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, backed by a solid foundation in graphic and brand design. I'm always excited to explore new mediums—from 3D simulation to generative systems—and I'm looking for a dynamic studio where I can help solve complex creative challenges.",
+                bioText: "Hi there! I'm Weijun, a Multidisciplinary Digital Media Artist who loves bridging the gap between bold visual storytelling and deep technical execution. I spend my time crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, backed by a solid foundation in graphic and brand design. I'm always excited to explore new mediums—from 3D simulation to generative systems—and I'm looking for a dynamic studio where I can help solve complex creative challenges.",
                 stackTitle: "Technical Skills", eduTitle: "Education & Background",
                 edu1School: "OCAD University | Toronto", edu1Deg: "Bachelor of Design, Digital Futures",
                 edu2School: "George Brown College | Toronto", edu2Deg: "Advanced Diploma, Graphic & Digital Design",
@@ -410,17 +482,20 @@
             },
             zh: {
                 navHome: "首页", navWork: "作品", navAbout: "关于",
-                songName: "午夜窗",
+                songName: "午夜之窗",
                 sysTag: "个人作品集", title1: "数字媒体", title2: "艺术家",
                 subText: "连接极具吸引力的视觉叙事<br>与高级技术执行。",
                 locationText: "位于加拿大安大略省多伦多",
                 featTag: "精选项目 // 网页交互",
+                pdfBtn: "查看完整介绍 PDF",
                 proj1Title: "算法环境界", proj1Sub: "交互式 AI 视觉与点云模拟",
                 proj2Title: "灰尘精灵", proj2Sub: "3D 角色控制器与游戏机制",
                 proj3Title: "模拟与客观性", proj3Sub: "粒子时间破碎与重组模拟",
                 proj5Title: "波霸 UFO", proj5Sub: "C# 游戏机制与交互物理",
+                proj6Title: "品牌视觉与平面设计", proj6Sub: "排版、包装与视觉叙事",
+                proj7Title: "虚幻五电影短片", proj7Sub: "实时渲染与场景美术",
                 aboutTitle: "关于我",
-                bioText: "你好呀! 我是 Weijun，一名热衷于将大胆的视觉叙事与底层技术执行相结合的创意技术人员。我平时主要使用 Unity、虚幻引擎和 Houdini 打造沉浸式的互动体验，同时我也拥有扎实的平面与品牌设计基础。我总是对探索新媒介充满热情——无论是 3D 物理模拟还是交互媒体。我非常期待能加入一个充满活力的工作室，一起解决复杂的创意挑战！",
+                bioText: "你好呀! 我是 Weijun，一名跨学科数字媒体艺术家，热衷于将大胆的视觉叙事与底层技术执行相结合。我平时主要使用 Unity、虚幻引擎和 Houdini 打造沉浸式的互动体验，同时我也拥有扎实的平面与品牌设计基础。我总是对探索新媒介充满热情——无论是 3D 物理模拟还是交互媒体。我非常期待能加入一个充满活力的工作室，一起解决复杂的创意挑战！",
                 stackTitle: "技术栈", eduTitle: "教育与背景",
                 edu1School: "安大略艺术设计大学 (OCAD)", edu1Deg: "设计学士，数字未来专业",
                 edu2School: "乔治布朗学院", edu2Deg: "高级文凭，平面与数字设计",
@@ -429,16 +504,19 @@
             fr: {
                 navHome: "ACCUEIL", navWork: "PROJETS", navAbout: "À PROPOS",
                 songName: "Fenêtres de Minuit",
-                sysTag: "PORTFOLIO EN LIGNE", title1: "Créatif", title2: "Technologue",
+                sysTag: "PORTFOLIO EN LIGNE", title1: "Média Numérique", title2: "Artiste",
                 subText: "Allier narration visuelle captivante<br>& exécution technique avancée.",
                 locationText: "BASÉ À TORONTO, ON, CANADA",
                 featTag: "PROJET PHARE // WEB",
+                pdfBtn: "VOIR DÉTAILS PDF",
                 proj1Title: "L'Umwelt Algorithmique", proj1Sub: "Vision IA Interactive & Nuage de Points",
                 proj2Title: "Dust Bunny", proj2Sub: "Contrôleur 3D & Mécaniques de Jeu",
                 proj3Title: "Simulation & Objectivité", proj3Sub: "Distorsion Temporelle et Réassemblage de Particules",
                 proj5Title: "Boba UFO", proj5Sub: "Physique Interactive & Logique de Jeu",
+                proj6Title: "Identité de Marque", proj6Sub: "Typographie, Packaging & Narration Visuelle",
+                proj7Title: "Court Métrage UE5", proj7Sub: "Rendu en Temps Réel & Art d'Environnement",
                 aboutTitle: "À PROPOS DE MOI",
-                bioText: "Salut ! Je suis Weijun, un technologue créatif qui aime faire le pont entre une narration visuelle audacieuse et une exécution technique approfondie. Je passe mon temps à créer des expériences interactives immersives avec Unity, Unreal Engine et Houdini, en m'appuyant sur de solides bases en design graphique. Je suis toujours enthousiaste à l'idée d'explorer de nouveaux médiums, de la simulation 3D à l'art génératif, et je cherche un studio dynamique pour relever des défis créatifs complexes.",
+                bioText: "Salut ! Je suis Weijun, un Artiste Multimédia Numérique qui aime faire le pont entre une narration visuelle audacieuse et une exécution technique approfondie. Je passe mon temps à créer des expériences interactives immersives avec Unity, Unreal Engine et Houdini, en m'appuyant sur de solides bases en design graphique. Je suis toujours enthousiaste à l'idée d'explorer de nouveaux médiums, de la simulation 3D à l'art génératif, et je cherche un studio dynamique pour relever des défis créatifs complexes.",
                 stackTitle: "Compétences Techniques", eduTitle: "Éducation",
                 edu1School: "Université OCAD | Toronto", edu1Deg: "Baccalauréat en Design, Futurs Numériques",
                 edu2School: "Collège George Brown | Toronto", edu2Deg: "Diplôme Avancé, Design Graphique & Numérique",
