@@ -149,7 +149,6 @@
         .subtext { color: rgba(224,224,224,0.6); font-family: monospace; font-size: 0.875rem; margin-bottom: 0.5rem;}
         .bio-text { font-size: 1rem; line-height: 1.6; color: rgba(224,224,224,0.9); font-weight: 300; }
         
-        /* === PDF 详情按钮样式 === */
         .pdf-btn {
             display: inline-flex; align-items: center; gap: 0.4rem; margin-top: auto; padding: 0.4rem 0.8rem;
             background: rgba(21, 21, 21, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
@@ -158,6 +157,46 @@
             backdrop-filter: blur(4px); width: fit-content; z-index: 20;
         }
         .pdf-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); transform: translateY(-2px); }
+
+        /* =========================================================
+           ✨ 新增：横向无缝跑马灯画廊 (Graphic Design) ✨
+           ========================================================= */
+        .marquee-container {
+            width: 100%; overflow: hidden; position: relative; margin-top: 1rem; padding: 1rem 0;
+            /* 两侧边缘渐变羽化，过渡更自然 */
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .marquee-track {
+            display: flex; width: max-content; gap: 2rem;
+            animation: scroll-marquee 25s linear infinite; /* 调整秒数控制速度 */
+        }
+        .marquee-track:hover {
+            animation-play-state: paused; /* 鼠标悬停时暂停滚动 */
+        }
+        .marquee-set {
+            display: flex; gap: 2rem; padding-right: 2rem; /* 匹配 gap 保持无缝衔接 */
+        }
+        .marquee-item {
+            width: 300px; height: 420px; flex-shrink: 0; /* 强制统一海报尺寸 */
+            border-radius: 0.75rem; overflow: hidden;
+            border: 1px solid var(--bento-border);
+            transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer; background: #111;
+        }
+        .marquee-item:hover {
+            border-color: var(--accent); transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+        .marquee-item img {
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.4s ease;
+        }
+        .marquee-item:hover img { opacity: 1; }
+
+        @keyframes scroll-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
         .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
         .skill-tag { border: 1px solid var(--bento-border); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 0.75rem; background: var(--bg); }
@@ -188,6 +227,12 @@
             .row-span-1, .row-span-2 { grid-row: span 1; }
             #portfolio .bento-item { min-height: 300px; }
             #about .bento-item { min-height: auto; padding: 1.25rem; }
+            
+            /* 手机端跑马灯海报尺寸缩小 */
+            .marquee-item { width: 220px; height: 310px; }
+            .marquee-track { gap: 1rem; }
+            .marquee-set { gap: 1rem; padding-right: 1rem; }
+
             .cta-content { flex-direction: row-reverse; align-items: center; justify-content: space-between; }
             .cta-box h3 { font-size: 1.25rem; margin: 0; line-height: 1.2; }
             .cta-icon { align-self: center; padding: 0.4rem; }
@@ -236,7 +281,8 @@
         <div class="nav-right">
             <div class="nav-links">
                 <a href="#hero" data-i18n="navHome">HOME</a>
-                <a href="#portfolio" data-i18n="navWork">WORK</a>
+                <a href="#portfolio" data-i18n="navWork">3D & DEV</a>
+                <a href="#design" data-i18n="navDesign">DESIGN</a>
                 <a href="#about" data-i18n="navAbout">ABOUT</a>
             </div>
             <div class="lang-switch">
@@ -349,7 +395,7 @@
                         </div>
                     </div>
 
-                    <div onclick="window.open('assets/Rainday Toronto.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-3 interactive">
+                    <div onclick="window.open('assets/Rainday Toronto.mp4', '_blank')" class="bento-item col-span-4 row-span-1 reveal delay-3 interactive">
                         <div class="media-placeholder">
                             <video src="assets/Rainday Toronto.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
@@ -369,26 +415,54 @@
                         </div>
                     </div>
 
-                    <div onclick="window.open('assets/graphic_design.pdf', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
-                        <div class="media-placeholder">
-                            <img src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop" alt="Graphic Design">
-                            <div class="media-overlay"></div>
-                        </div>
-                        <div class="content-front">
-                            <div style="display:flex; justify-content:space-between; width:100%;">
-                                <span class="tag">BRANDING & UI/UX // DESIGN</span>
-                                <i class="ph ph-arrow-up-right" style="font-size:1.2rem; color:var(--text);"></i>
-                            </div>
-                            <div style="display: flex; flex-direction: column;">
-                                <h3 data-i18n="proj6Title">Brand Identity & Design</h3>
-                                <p class="subtext" data-i18n="proj6Sub">Typography, Packaging & Visual Storytelling</p>
-                                <a href="assets/graphic_design_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
-                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
-                                </a>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="design" class="snap-section">
+            <div class="bento-wrapper" style="justify-content: center;">
+                <div class="bento-item reveal delay-1" style="min-height: auto; padding: 3rem 0; background: var(--bg); border: none;">
+                    
+                    <div style="padding: 0 2rem; text-align: center; margin-bottom: 2rem;">
+                        <h3 data-i18n="designTitle" style="font-size: 2.5rem; color: var(--accent);">Graphic Design</h3>
+                        <p class="subtext" data-i18n="designSub">Poster Gallery & Visual Arts</p>
                     </div>
 
+                    <div class="marquee-container">
+                        <div class="marquee-track">
+                            
+                            <div class="marquee-set">
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/WeijunW Vintage Poster.png" onerror="this.src='https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/WeijunW snowglobe.png" onerror="this.src='https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/TGW.jpg" onerror="this.src='https://images.unsplash.com/photo-1549492423-400259a2e574?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/Interstellar poster.jpg" onerror="this.src='https://images.unsplash.com/photo-1627483262268-9c2b5b3290a0?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                            </div>
+                            
+                            <div class="marquee-set">
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/WeijunW Vintage Poster.png" onerror="this.src='https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/WeijunW snowglobe.png" onerror="this.src='https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/TGW.jpg" onerror="this.src='https://images.unsplash.com/photo-1549492423-400259a2e574?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                                <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
+                                    <img src="assets/Interstellar poster.jpg" onerror="this.src='https://images.unsplash.com/photo-1627483262268-9c2b5b3290a0?q=80&w=800&auto=format&fit=crop'">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -460,7 +534,7 @@
     <script>
         const translations = {
             en: {
-                navHome: "HOME", navWork: "WORK", navAbout: "ABOUT",
+                navHome: "HOME", navWork: "3D & DEV", navDesign: "DESIGN", navAbout: "ABOUT",
                 songName: "Midnight Windows",
                 sysTag: "PORTFOLIO WEBSITE", title1: "Digital Media", title2: "Artist",
                 subText: "Bridging compelling visual storytelling<br>& advanced technical execution.",
@@ -471,8 +545,8 @@
                 proj2Title: "Dust Bunny", proj2Sub: "3D Character Controller & Game Mechanics",
                 proj3Title: "Simulation & Objectivity", proj3Sub: "Particle Time Distortion & Reassembly",
                 proj5Title: "Boba UFO", proj5Sub: "Interactive Physics & Game Logic",
-                proj6Title: "Brand Identity & Design", proj6Sub: "Typography, Packaging & Visual Storytelling",
-                proj7Title: "UE5 Cinematic Short", proj7Sub: "Real-time Rendering & Environment Art",
+                proj7Title: "Rainy Night Toronto", proj7Sub: "Real-time Rendering & Environment Art",
+                designTitle: "Graphic Design", designSub: "Poster Gallery & Visual Arts",
                 aboutTitle: "ABOUT ME",
                 bioText: "Hi there! I'm Weijun, a Multidisciplinary Digital Media Artist who loves bridging the gap between bold visual storytelling and deep technical execution. I spend my time crafting immersive interactive experiences using Unity, Unreal Engine, and Houdini, backed by a solid foundation in graphic and brand design. I'm always excited to explore new mediums—from 3D simulation to generative systems—and I'm looking for a dynamic studio where I can help solve complex creative challenges.",
                 stackTitle: "Technical Skills", eduTitle: "Education & Background",
@@ -481,7 +555,7 @@
                 ctaTitle1: "DOWNLOAD", ctaTitle2: "RESUME"
             },
             zh: {
-                navHome: "首页", navWork: "作品", navAbout: "关于",
+                navHome: "首页", navWork: "开发", navDesign: "设计", navAbout: "关于",
                 songName: "午夜之窗",
                 sysTag: "个人作品集", title1: "数字媒体", title2: "艺术家",
                 subText: "连接极具吸引力的视觉叙事<br>与高级技术执行。",
@@ -492,8 +566,8 @@
                 proj2Title: "灰尘精灵", proj2Sub: "3D 角色控制器与游戏机制",
                 proj3Title: "模拟与客观性", proj3Sub: "粒子时间破碎与重组模拟",
                 proj5Title: "波霸 UFO", proj5Sub: "C# 游戏机制与交互物理",
-                proj6Title: "品牌视觉与平面设计", proj6Sub: "排版、包装与视觉叙事",
-                proj7Title: "虚幻五电影短片", proj7Sub: "实时渲染与场景美术",
+                proj7Title: "多伦多雨夜", proj7Sub: "UE5 实时渲染与场景美术",
+                designTitle: "平面设计", designSub: "海报画廊与视觉艺术展示",
                 aboutTitle: "关于我",
                 bioText: "你好呀! 我是 Weijun，一名跨学科数字媒体艺术家，热衷于将大胆的视觉叙事与底层技术执行相结合。我平时主要使用 Unity、虚幻引擎和 Houdini 打造沉浸式的互动体验，同时我也拥有扎实的平面与品牌设计基础。我总是对探索新媒介充满热情——无论是 3D 物理模拟还是交互媒体。我非常期待能加入一个充满活力的工作室，一起解决复杂的创意挑战！",
                 stackTitle: "技术栈", eduTitle: "教育与背景",
@@ -502,7 +576,7 @@
                 ctaTitle1: "下载", ctaTitle2: "个人简历"
             },
             fr: {
-                navHome: "ACCUEIL", navWork: "PROJETS", navAbout: "À PROPOS",
+                navHome: "ACCUEIL", navWork: "3D & DÉV", navDesign: "DESIGN", navAbout: "À PROPOS",
                 songName: "Fenêtres de Minuit",
                 sysTag: "PORTFOLIO EN LIGNE", title1: "Média Numérique", title2: "Artiste",
                 subText: "Allier narration visuelle captivante<br>& exécution technique avancée.",
@@ -513,8 +587,8 @@
                 proj2Title: "Dust Bunny", proj2Sub: "Contrôleur 3D & Mécaniques de Jeu",
                 proj3Title: "Simulation & Objectivité", proj3Sub: "Distorsion Temporelle et Réassemblage de Particules",
                 proj5Title: "Boba UFO", proj5Sub: "Physique Interactive & Logique de Jeu",
-                proj6Title: "Identité de Marque", proj6Sub: "Typographie, Packaging & Narration Visuelle",
-                proj7Title: "Court Métrage UE5", proj7Sub: "Rendu en Temps Réel & Art d'Environnement",
+                proj7Title: "Nuit Pluvieuse Toronto", proj7Sub: "Rendu UE5 en Temps Réel",
+                designTitle: "Design Graphique", designSub: "Galerie d'Affiches et Arts Visuels",
                 aboutTitle: "À PROPOS DE MOI",
                 bioText: "Salut ! Je suis Weijun, un Artiste Multimédia Numérique qui aime faire le pont entre une narration visuelle audacieuse et une exécution technique approfondie. Je passe mon temps à créer des expériences interactives immersives avec Unity, Unreal Engine et Houdini, en m'appuyant sur de solides bases en design graphique. Je suis toujours enthousiaste à l'idée d'explorer de nouveaux médiums, de la simulation 3D à l'art génératif, et je cherche un studio dynamique pour relever des défis créatifs complexes.",
                 stackTitle: "Compétences Techniques", eduTitle: "Éducation",
