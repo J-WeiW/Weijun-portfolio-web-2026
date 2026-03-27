@@ -158,45 +158,29 @@
         }
         .pdf-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); transform: translateY(-2px); }
 
-        /* =========================================================
-           ✨ 新增：横向无缝跑马灯画廊 (Graphic Design) ✨
-           ========================================================= */
+        /* === 横向无缝跑马灯画廊 (Graphic Design) === */
         .marquee-container {
             width: 100%; overflow: hidden; position: relative; margin-top: 1rem; padding: 1rem 0;
-            /* 两侧边缘渐变羽化，过渡更自然 */
             mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
             -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
         }
         .marquee-track {
             display: flex; width: max-content; gap: 2rem;
-            animation: scroll-marquee 25s linear infinite; /* 调整秒数控制速度 */
+            animation: scroll-marquee 25s linear infinite; 
         }
-        .marquee-track:hover {
-            animation-play-state: paused; /* 鼠标悬停时暂停滚动 */
-        }
-        .marquee-set {
-            display: flex; gap: 2rem; padding-right: 2rem; /* 匹配 gap 保持无缝衔接 */
-        }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-set { display: flex; gap: 2rem; padding-right: 2rem; }
         .marquee-item {
-            width: 300px; height: 420px; flex-shrink: 0; /* 强制统一海报尺寸 */
-            border-radius: 0.75rem; overflow: hidden;
-            border: 1px solid var(--bento-border);
+            width: 300px; height: 420px; flex-shrink: 0; 
+            border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--bento-border);
             transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             cursor: pointer; background: #111;
         }
-        .marquee-item:hover {
-            border-color: var(--accent); transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
-        }
-        .marquee-item img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.4s ease;
-        }
+        .marquee-item:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
+        .marquee-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.4s ease; }
         .marquee-item:hover img { opacity: 1; }
 
-        @keyframes scroll-marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        @keyframes scroll-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
         .skill-tag { border: 1px solid var(--bento-border); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 0.75rem; background: var(--bg); }
@@ -222,13 +206,14 @@
             .nav-logo span { display: none; }
             .nav-links { display: none; } 
             .lang-switch { border-left: none; padding-left: 0; }
+            
             .bento-grid { grid-template-columns: 1fr !important; gap: 1rem; grid-auto-rows: auto; }
-            .col-span-1, .col-span-2, .col-span-3, .col-span-4 { grid-column: span 1; }
-            .row-span-1, .row-span-2 { grid-row: span 1; }
+            .col-span-1, .col-span-2, .col-span-3, .col-span-4 { grid-column: span 1 !important; }
+            .row-span-1, .row-span-2 { grid-row: span 1 !important; }
+            
             #portfolio .bento-item { min-height: 300px; }
             #about .bento-item { min-height: auto; padding: 1.25rem; }
             
-            /* 手机端跑马灯海报尺寸缩小 */
             .marquee-item { width: 220px; height: 310px; }
             .marquee-track { gap: 1rem; }
             .marquee-set { gap: 1rem; padding-right: 1rem; }
@@ -246,6 +231,7 @@
             #volume-bar { display: none; }
             .content-front { transform: none !important; transition: none; } 
             .scroll-indicator { display: none; } 
+            .empty-spacer { display: none; } /* 移动端隐藏空占位符 */
         }
     </style>
 </head>
@@ -311,11 +297,9 @@
             <i class="ph ph-caret-down scroll-indicator"></i>
         </section>
 
-        <section id="portfolio" class="snap-section">
+        <section id="portfolio" class="snap-section" style="padding-top: 8rem; padding-bottom: 4rem;">
             <div class="bento-wrapper">
-                <div class="bento-grid">
-                    
-                    <div onclick="window.open('ai-view.html', '_blank')" class="bento-item col-span-2 row-span-2 reveal interactive">
+                <div class="bento-grid" style="grid-auto-rows: minmax(280px, auto);"> <div onclick="window.open('ai-view.html', '_blank')" class="bento-item col-span-2 row-span-1 reveal interactive">
                         <div class="media-placeholder">
                             <video src="assets/ai_view_preview.mp4" autoplay loop muted playsinline></video>
                             <div class="media-overlay"></div>
@@ -334,8 +318,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-span-2 row-span-1 empty-spacer" style="visibility: hidden;"></div>
 
-                    <div onclick="window.open('assets/particle time distortion.mp4', '_blank')" class="bento-item col-span-2 row-span-2 reveal delay-1 interactive">
+
+                    <div onclick="window.open('assets/particle time distortion.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
                         <div class="media-placeholder">
                             <video src="assets/particle time distortion.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
@@ -343,10 +329,10 @@
                         <div class="content-front">
                             <div style="display:flex; justify-content:space-between; width:100%;">
                                 <span class="tag">HOUDINI VFX // PREVIEW</span>
-                                <i class="ph ph-arrows-out" style="font-size:1.5rem; background:var(--accent); color:var(--bg); border-radius:50%; padding:4px;"></i>
+                                <i class="ph ph-arrows-out" style="font-size:1.2rem; color:var(--text);"></i>
                             </div>
                             <div style="display: flex; flex-direction: column;">
-                                <h3 style="font-size: 2.25rem;" data-i18n="proj3Title">Simulation & Objectivity</h3>
+                                <h3 style="font-size: 1.75rem;" data-i18n="proj3Title">Simulation & Objectivity</h3>
                                 <p class="subtext" data-i18n="proj3Sub">Particle Time Distortion & Reassembly</p>
                                 <a href="assets/Entropy and the Reconstruction of Time.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
                                     <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
@@ -354,8 +340,29 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div onclick="window.open('assets/The Pathfinding Mold.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
+                        <div class="media-placeholder">
+                            <video src="assets/The Pathfinding Mold.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
+                            <div class="media-overlay"></div>
+                        </div>
+                        <div class="content-front">
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <span class="tag">HOUDINI SIMULATION // PREVIEW</span>
+                                <i class="ph ph-arrows-out" style="font-size:1.2rem; color:var(--text);"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <h3 style="font-size: 1.75rem;" data-i18n="proj8Title">The Pathfinding Mold</h3>
+                                <p class="subtext" data-i18n="proj8Sub">Procedural Growth & Particle Algorithms</p>
+                                <a href="assets/pathfinding_mold_details.pdf" target="_blank" class="pdf-btn" onclick="event.stopPropagation()">
+                                    <i class="ph ph-file-pdf"></i> <span data-i18n="pdfBtn">VIEW DETAILS PDF</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div onclick="window.open('assets/Dust Bunny Preview.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
+
+                    <div onclick="window.open('assets/Dust Bunny Preview.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
                         <div class="media-placeholder">
                             <video src="assets/Dust Bunny Preview.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
@@ -375,7 +382,7 @@
                         </div>
                     </div>
 
-                    <div onclick="window.open('assets/Boba UFO.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-1 interactive">
+                    <div onclick="window.open('assets/Boba UFO.mp4', '_blank')" class="bento-item col-span-2 row-span-1 reveal delay-2 interactive">
                         <div class="media-placeholder">
                             <video src="assets/Boba UFO.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
                             <div class="media-overlay"></div>
@@ -445,7 +452,6 @@
                                     <img src="assets/Interstellar poster.jpg" onerror="this.src='https://images.unsplash.com/photo-1627483262268-9c2b5b3290a0?q=80&w=800&auto=format&fit=crop'">
                                 </div>
                             </div>
-                            
                             <div class="marquee-set">
                                 <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
                                     <img src="assets/WeijunW Vintage Poster.png" onerror="this.src='https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop'">
@@ -544,6 +550,8 @@
                 proj1Title: "The Algorithmic Umwelt", proj1Sub: "Interactive AI Vision & Point-cloud Simulation",
                 proj2Title: "Dust Bunny", proj2Sub: "3D Character Controller & Game Mechanics",
                 proj3Title: "Simulation & Objectivity", proj3Sub: "Particle Time Distortion & Reassembly",
+                // 新增的 Pathfinding Mold 翻译
+                proj8Title: "The Pathfinding Mold", proj8Sub: "Procedural Growth & Particle Algorithms",
                 proj5Title: "Boba UFO", proj5Sub: "Interactive Physics & Game Logic",
                 proj7Title: "Rainy Night Toronto", proj7Sub: "Real-time Rendering & Environment Art",
                 designTitle: "Graphic Design", designSub: "Poster Gallery & Visual Arts",
@@ -565,11 +573,12 @@
                 proj1Title: "算法环境界", proj1Sub: "交互式 AI 视觉与点云模拟",
                 proj2Title: "灰尘精灵", proj2Sub: "3D 角色控制器与游戏机制",
                 proj3Title: "模拟与客观性", proj3Sub: "粒子时间破碎与重组模拟",
+                proj8Title: "寻路菌落", proj8Sub: "程序化生长与粒子算法",
                 proj5Title: "波霸 UFO", proj5Sub: "C# 游戏机制与交互物理",
                 proj7Title: "多伦多雨夜", proj7Sub: "UE5 实时渲染与场景美术",
                 designTitle: "平面设计", designSub: "海报画廊与视觉艺术展示",
                 aboutTitle: "关于我",
-                bioText: "你好呀! 我是 Weijun，一名跨学科数字媒体艺术家，热衷于将大胆的视觉叙事与底层技术执行相结合。我平时主要使用 Unity、虚幻引擎和 Houdini 打造沉浸式的互动体验，同时我也拥有扎实的平面与品牌设计基础。我总是对探索新媒介充满热情—无论是 3D 物理模拟还是交互媒体。我非常期待能加入一个充满活力的工作室，一起解决复杂的创意挑战！",
+                bioText: "你好呀! 我是 Weijun，一名跨学科数字媒体艺术家，热衷于将大胆的视觉叙事与底层技术执行相结合。我平时主要使用 Unity、虚幻引擎和 Houdini 打造沉浸式的互动体验，同时我也拥有扎实的平面与品牌设计基础。我总是对探索新媒介充满热情——无论是 3D 物理模拟还是交互媒体。我非常期待能加入一个充满活力的工作室，一起解决复杂的创意挑战！",
                 stackTitle: "技术栈", eduTitle: "教育与背景",
                 edu1School: "安大略艺术设计大学 (OCAD)", edu1Deg: "设计学士，数字未来专业",
                 edu2School: "乔治布朗学院", edu2Deg: "高级文凭，平面与数字设计",
@@ -586,6 +595,7 @@
                 proj1Title: "L'Umwelt Algorithmique", proj1Sub: "Vision IA Interactive & Nuage de Points",
                 proj2Title: "Dust Bunny", proj2Sub: "Contrôleur 3D & Mécaniques de Jeu",
                 proj3Title: "Simulation & Objectivité", proj3Sub: "Distorsion Temporelle et Réassemblage de Particules",
+                proj8Title: "La Moisissure Exploratrice", proj8Sub: "Croissance Procédurale & Algorithmes",
                 proj5Title: "Boba UFO", proj5Sub: "Physique Interactive & Logique de Jeu",
                 proj7Title: "Nuit Pluvieuse Toronto", proj7Sub: "Rendu UE5 en Temps Réel",
                 designTitle: "Design Graphique", designSub: "Galerie d'Affiches et Arts Visuels",
