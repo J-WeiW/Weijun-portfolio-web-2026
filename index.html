@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>王炜竣 Weijun Wang | Digital Future & Interaction Designer</title>
     
-    <!-- 引入英文字体与中文衬线体 -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -53,10 +52,10 @@
             width: 100vw;
             height: 100vh;
             z-index: 0;
-            pointer-events: none; /* 让鼠标事件穿透给下方的实际内容 */
+            pointer-events: none;
         }
 
-        /* === 非对称布局架构 === */
+        /* === 布局架构 === */
         .layout-wrapper {
             display: flex;
             min-height: 100vh;
@@ -64,37 +63,93 @@
             z-index: 10;
         }
 
-        /* --- 左侧固定栏 --- */
+        /* =========================================================
+           ✨ 抽屉式导航栏 (Drawer Sidebar) ✨
+           ========================================================= */
+        
+        /* 汉堡菜单按钮 */
+        .menu-toggle {
+            position: fixed;
+            top: 2.5rem;
+            left: 2.5rem;
+            z-index: 1002;
+            background: rgba(244, 241, 235, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: var(--text-color);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .menu-toggle:hover {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        /* 侧边栏遮罩层 */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .sidebar-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 侧边栏本体 */
         .sidebar {
-            width: 360px; /* 稍微加宽以适应更大的字体 */
+            width: 360px; 
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
             border-right: 1px solid var(--border-color);
-            padding: 4rem 3rem;
+            padding: 8rem 3rem 4rem 3rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            /* 侧边栏采用半透明磨砂，让背后的粒子若隐若现 */
-            background-color: rgba(244, 241, 235, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 100;
+            background-color: var(--bg-color);
+            z-index: 1001;
+            
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.2, 1);
+            box-shadow: 10px 0 30px rgba(0,0,0,0);
+        }
+        .sidebar.open {
+            transform: translateX(0);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
 
         .logo-area h1 {
-            font-size: 3rem; /* 字体放大 */
+            font-size: 3rem;
             line-height: 1;
             margin-bottom: 0.5rem;
             letter-spacing: 2px;
         }
         .logo-area .en-name { font-size: 1.2rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;}
         
-        .nav-menu { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 4rem; }
+        .nav-menu { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem; }
         .nav-menu a {
             font-family: var(--font-zh);
-            font-size: 1.3rem; /* 字体放大 */
+            font-size: 1.3rem; 
             color: var(--text-color);
             text-decoration: none;
             display: flex; align-items: center; gap: 0.5rem;
@@ -116,16 +171,16 @@
         }
         .lang-switch button:hover, .lang-switch button.active { color: var(--accent-color); }
 
-        /* --- 右侧滚动主内容区 --- */
+        /* --- 主内容区 --- */
         .main-content {
-            margin-left: 360px;
-            width: calc(100% - 360px);
+            margin-left: 0;
+            width: 100%;
             padding: 0;
             background: transparent;
         }
 
         .section-block {
-            padding: 6rem 5rem;
+            padding: 6rem 5rem 6rem 8rem;
         }
         .section-header {
             display: flex; align-items: baseline; gap: 1rem; margin-bottom: 4rem;
@@ -135,7 +190,7 @@
 
         /* --- Hero 区 --- */
         .hero-section {
-            min-height: 85vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -144,7 +199,7 @@
         .hero-title-main {
             font-family: var(--font-en);
             font-weight: 700;
-            font-size: clamp(4rem, 9vw, 8rem);
+            font-size: clamp(4.5rem, 10vw, 9rem);
             line-height: 0.9;
             text-transform: uppercase;
             margin-bottom: 2rem;
@@ -175,7 +230,6 @@
             color: var(--text-color);
             max-width: 800px;
             line-height: 1.8;
-            /* 玻璃态高雅卡片背景，防止底层粒子干扰阅读 */
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -185,7 +239,7 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.03);
         }
 
-        /* 纯 CSS 跑马灯分隔带 */
+        /* 跑马灯分隔带 */
         .marquee-strip {
             background-color: var(--text-color);
             color: var(--bg-color);
@@ -209,7 +263,7 @@
            ✨ 作品案例：交错式悬浮卡片排版 (Editorial Layout) ✨
            ========================================================= */
         .portfolio-wrapper {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -221,13 +275,8 @@
             margin-bottom: 6rem;
         }
         
-        /* 偶数行左右互换对齐 */
-        .editorial-row:nth-child(even) {
-            grid-template-columns: 1fr 1.3fr;
-        }
-        .editorial-row:nth-child(even) .project-media-wrap {
-            order: 2;
-        }
+        .editorial-row:nth-child(even) { grid-template-columns: 1fr 1.3fr; }
+        .editorial-row:nth-child(even) .project-media-wrap { order: 2; }
 
         .project-media-wrap {
             width: 100%;
@@ -270,7 +319,6 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* 提取文本区域为玻璃态悬浮卡片 */
         .project-info {
             display: flex; flex-direction: column; align-items: flex-start;
             background: rgba(255, 255, 255, 0.45);
@@ -316,34 +364,13 @@
             background: var(--accent-color); border-color: var(--accent-color); color: #fff; transform: translateY(-2px); 
         }
 
-        /* === 横向无缝跑马灯画廊 === */
-        .marquee-container {
-            width: 100%; overflow: hidden; position: relative; margin-top: 1rem; padding: 1rem 0;
-            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-        }
-        .marquee-track {
-            display: flex; width: max-content; gap: 2rem;
-            animation: scroll-marquee 25s linear infinite; 
-        }
-        .marquee-track:hover { animation-play-state: paused; }
-        .marquee-set { display: flex; gap: 2rem; padding-right: 2rem; }
-        .marquee-item {
-            width: 320px; height: 450px; flex-shrink: 0; 
-            border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.4);
-            transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            cursor: pointer; background: #111;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-        .marquee-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-color: var(--accent-color);}
-        .marquee-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-        .marquee-item:hover img { transform: scale(1.05); }
-
-        /* --- 简历/经历排版 --- */
+        /* === 简历/经历排版 === */
         .resume-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         .resume-block h3 {
             font-family: var(--font-en); font-size: 1.3rem; text-transform: uppercase; margin-bottom: 2rem; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;
@@ -366,84 +393,63 @@
 
         /* --- 响应式适配 --- */
         @media (max-width: 1024px) {
-            .layout-wrapper { flex-direction: column; }
-            
-            .sidebar {
-                width: 100%; height: auto; position: relative; padding: 2.5rem 3rem;
-                border-right: none; border-bottom: 1px solid var(--border-color);
-                flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;
-            }
-            .logo-area { order: 1; }
-            .contact-info { order: 2; text-align: right; }
-            .contact-info p { justify-content: flex-end; margin-bottom: 0.2rem;}
-            .lang-switch { margin-top: 0; justify-content: flex-end;}
-            .nav-menu { flex-direction: row; gap: 2rem; width: 100%; order: 3; padding-top: 1.5rem; margin-top: 1.5rem; border-top: 1px solid var(--border-color); }
-            
-            .main-content { margin-left: 0; width: 100%; }
-            .section-block { padding: 4rem 3rem; }
-            
+            .section-block { padding: 5rem 3rem; }
             .editorial-row, .editorial-row:nth-child(even) {
                 grid-template-columns: 1fr; gap: 2rem; margin-bottom: 4rem;
             }
             .editorial-row:nth-child(even) .project-media-wrap { order: -1; }
             .resume-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .menu-toggle { top: 2rem; left: 2rem; }
         }
 
         @media (max-width: 768px) {
-            .sidebar { padding: 1.5rem; flex-direction: column; gap: 0; }
-            .logo-area h1 { font-size: 2.2rem; }
-            .nav-menu { order: 2; gap: 1rem; flex-direction: column;}
-            .contact-info { order: 3; text-align: left; width: 100%; padding-top: 1.5rem; margin-top: 1.5rem; border-top: 1px solid var(--border-color); }
-            .contact-info p { justify-content: flex-start; }
-            .lang-switch { justify-content: flex-start; margin-top: 0.5rem;}
+            .menu-toggle { top: 1.5rem; left: 1.5rem; width: 48px; height: 48px; font-size: 1.5rem;}
+            .sidebar { padding: 6rem 2rem 3rem 2rem; width: 300px;}
             
-            .section-block { padding: 3rem 1.5rem; }
+            .section-block { padding: 6rem 1.5rem 3rem 1.5rem; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 2rem; }
             .section-header h2 { font-size: 2rem; line-height: 1.2; }
             
-            .hero-section { min-height: auto; padding: 6rem 1.5rem 4rem 1.5rem; justify-content: flex-start;}
-            .hero-title-main { font-size: 3.5rem; }
+            .hero-section { min-height: auto; padding-top: 8rem; justify-content: flex-start;}
+            .hero-title-main { font-size: 3.5rem; margin-bottom: 1.5rem;}
             .hero-roles { font-size: 1.15rem; border-left-width: 3px; padding-left: 1rem; margin-bottom: 1.5rem;}
             .hero-desc { font-size: 1.05rem; padding: 1.2rem;}
             
             .project-info { padding: 1.5rem; }
             .proj-title { font-size: 1.8rem; }
             
-            .marquee-item { width: 240px; height: 340px; }
-            .marquee-track { gap: 1rem; }
-            .marquee-set { gap: 1rem; padding-right: 1rem; }
-
             .resume-card { padding: 1.5rem; }
             .resume-block h3 { margin-bottom: 1.5rem; }
             
-            .marquee-content { font-size: 0.85rem; }
             footer { padding: 2rem 1.5rem; text-align: left; }
         }
     </style>
 </head>
 <body>
 
-    <!-- === 全局交互式粒子网络底图 === -->
     <canvas id="interactive-canvas"></canvas>
 
     <div class="layout-wrapper">
         
-        <!-- 左侧固定栏 / 移动端 Header -->
-        <aside class="sidebar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+            <i class="ph ph-list"></i>
+        </button>
+
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <aside class="sidebar" id="sidebar">
             <div class="logo-area">
                 <h1>王炜竣</h1>
                 <div class="en-name">Weijun Wang <span style="color:var(--accent-color);">//</span></div>
             </div>
 
             <nav class="nav-menu">
-                <a href="#projects" data-i18n="navWork">作品案例 <span class="en-font" style="font-size:0.8rem; color:var(--text-muted)">WORKS</span></a>
-                <a href="#design" data-i18n="navDesign">视觉设计 <span class="en-font" style="font-size:0.8rem; color:var(--text-muted)">DESIGN</span></a>
-                <a href="#experience" data-i18n="navAbout">能力与背景 <span class="en-font" style="font-size:0.8rem; color:var(--text-muted)">RESUME</span></a>
+                <a href="#projects" class="nav-link" data-i18n="navWork">作品案例 <span class="en-font" style="font-size:0.8rem; color:var(--text-muted)">CASES</span></a>
+                <a href="#experience" class="nav-link" data-i18n="navAbout">能力与背景 <span class="en-font" style="font-size:0.8rem; color:var(--text-muted)">RESUME</span></a>
             </nav>
 
             <div class="contact-info">
                 <div class="lang-switch">
-                    <!-- 默认中文，无法语 -->
                     <button onclick="setLang('zh')" id="btn-zh" class="active">中文</button>
                     <button onclick="setLang('en')" id="btn-en">EN</button>
                 </div>
@@ -455,13 +461,10 @@
             </div>
         </aside>
 
-        <!-- 右侧内容区 -->
         <main class="main-content">
             
-            <!-- Hero / 简介 -->
             <section class="section-block hero-section">
                 <div class="hero-content-wrapper">
-                    <!-- 核心主标题 -->
                     <div class="hero-title-main">
                         <span data-i18n="title1">Digital</span><br>
                         <span class="text-stroke" data-i18n="title2">Future</span>
@@ -474,12 +477,11 @@
                     </div>
                     
                     <p class="hero-desc" data-i18n="bioText">
-                        你好呀！我是一名多学科艺术媒体设计师。具备数字交互创作背景，我擅长将极具表现力的视觉叙事与严谨的用户体验、系统策划相结合。我平时主要在 Unity、Unreal Engine 和 Houdini 中探索系统生成与交互原型。从机制逻辑的白盒搭建，到程序化视觉艺术，我致力于通过前沿技术手段解决复杂的设计挑战，打造沉浸式的数字未来体验。
+                        你好，我是 Weijun，一名交互设计师。我专注于系统生成与交互原型的开发，熟练运用 Unity、Unreal Engine 和 Houdini 进行创作。我的专业能力涵盖从核心机制的白盒搭建、逻辑编写，到程序化视觉的落地实现。我注重用户体验 (UX) 与底层技术架构的结合，能够独立完成从概念设计到高保真原型的完整开发流程。
                     </p>
                 </div>
             </section>
 
-            <!-- 跑马灯分隔 -->
             <div class="marquee-strip">
                 <div class="marquee-content">
                     <span>INTERACTION DESIGN</span> <span>USER EXPERIENCE</span> <span>RAPID PROTOTYPING</span> <span>DIGITAL FUTURES</span> <span>SPATIAL COMPUTING</span> <span>VISUAL ARTS</span>
@@ -487,7 +489,6 @@
                 </div>
             </div>
 
-            <!-- === 作品案例：交错式排版区 === -->
             <section id="projects" class="section-block">
                 <div class="section-header">
                     <h2 data-i18n="secProjects">作品案例</h2>
@@ -496,7 +497,6 @@
 
                 <div class="portfolio-wrapper">
                     
-                    <!-- 项目 1: 算法环境界 (Umwelt) -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/The Algorithmic Umwelt.pdf', '_blank')">
                             <video src="assets/ai_view_preview.mp4" autoplay loop muted playsinline></video>
@@ -505,7 +505,7 @@
                         <div class="project-info">
                             <div class="proj-meta">
                                 <span class="proj-year">2026</span>
-                                <span class="proj-role" data-i18n="proj1Role">空间交互 / 算法识别</span>
+                                <span class="proj-role" data-i18n="proj1Role">空间交互 / WebGL</span>
                             </div>
                             <h3 class="proj-title" data-i18n="proj1Title">算法环境界 (Umwelt)</h3>
                             <p class="proj-desc" data-i18n="proj1Desc">构建基于浏览器的实时交互体验。运用 Three.js 与音频频谱分析，将不可见的数据环境转化为可视、可互动的系统界面反馈。</p>
@@ -518,10 +518,8 @@
                         </div>
                     </div>
 
-                    <!-- 项目 2: S.T.A.C.S. -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/STACS.pdf', '_blank')">
-                            <!-- 视频预览占位符，请添加实际的视频资产 -->
                             <video src="assets/STACS_preview.mp4" autoplay loop muted playsinline></video>
                             <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
                         </div>
@@ -535,14 +533,12 @@
                             <div class="proj-tags">
                                 <span class="proj-tag">Tactics</span><span class="proj-tag">Browser-based</span><span class="proj-tag">System UI</span>
                             </div>
-                            <!-- PDF文档占位符，请替换为实际文档路径 -->
                             <a href="assets/STACS.pdf" target="_blank" class="pdf-btn">
                                 <i class="ph ph-file-text"></i> <span data-i18n="pdfBtn">查看项目详情</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- 项目 3: 流光巡径 -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/The Pathfinding Mold.pdf', '_blank')">
                             <video src="assets/The Pathfinding Mold.mp4" autoplay loop muted playsinline></video>
@@ -551,7 +547,7 @@
                         <div class="project-info">
                             <div class="proj-meta">
                                 <span class="proj-year">2026</span>
-                                <span class="proj-role" data-i18n="proj3Role">算法生成 / 特效模拟</span>
+                                <span class="proj-role" data-i18n="proj3Role">算法生成 / 视觉系统</span>
                             </div>
                             <h3 class="proj-title" data-i18n="proj3Title">流光巡径</h3>
                             <p class="proj-desc" data-i18n="proj3Desc">探索数字生命的生长形态。使用 Houdini 研发程序化寻路算法系统，将冰冷的逻辑规则转译为具有高度随机美感的生成艺术。</p>
@@ -564,7 +560,6 @@
                         </div>
                     </div>
 
-                    <!-- 项目 4: 灰尘精灵 -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/Dust Bunny-Design-Document.pdf', '_blank')">
                             <video src="assets/Dust Bunny Preview.mp4" autoplay loop muted playsinline></video>
@@ -573,10 +568,10 @@
                         <div class="project-info">
                             <div class="proj-meta">
                                 <span class="proj-year">2026</span>
-                                <span class="proj-role" data-i18n="proj4Role">3C设计 / 环境交互</span>
+                                <span class="proj-role" data-i18n="proj4Role">3C 体验 / 环境交互</span>
                             </div>
                             <h3 class="proj-title" data-i18n="proj4Title">灰尘精灵</h3>
-                            <p class="proj-desc" data-i18n="proj4Desc">以叙事为主导的3D平台跳跃小游戏。探索微缩环境下的场景氛围体验，设计角色“吸附&成长”交互机制，把控物理反馈与玩家操作预期的匹配度。</p>
+                            <p class="proj-desc" data-i18n="proj4Desc">以空间探索为主导的机制原型。设计角色 3D 控制器与“吸附”交互机制，精准把控物理反馈与玩家操作预期的匹配度。</p>
                             <div class="proj-tags">
                                 <span class="proj-tag">User Experience</span><span class="proj-tag">Prototyping</span><span class="proj-tag">Unity</span>
                             </div>
@@ -586,7 +581,6 @@
                         </div>
                     </div>
 
-                    <!-- 项目 5: UFO RUN -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/UFO Game-Design-Document.pdf', '_blank')">
                             <video src="assets/Boba UFO.mp4" autoplay loop muted playsinline></video>
@@ -595,10 +589,10 @@
                         <div class="project-info">
                             <div class="proj-meta">
                                 <span class="proj-year">2025</span>
-                                <span class="proj-role" data-i18n="proj5Role">小游戏DENO / 控制器开发</span>
+                                <span class="proj-role" data-i18n="proj5Role">交互原型 / C#开发</span>
                             </div>
                             <h3 class="proj-title" data-i18n="proj5Title">UFO RUN</h3>
-                            <p class="proj-desc" data-i18n="proj5Desc">基于 C# 构建的无限闯关小游戏DEMO。设计磁力吸收机制与动态收集反馈逻辑，通过动态难度设计探索玩家在游戏中的心流状态。</p>
+                            <p class="proj-desc" data-i18n="proj5Desc">基于 C# 构建的交互物理原型。设计磁力吸收机制与动态收集反馈逻辑，通过持续的交互循环验证操作系统的心流体验。</p>
                             <div class="proj-tags">
                                 <span class="proj-tag">Interaction</span><span class="proj-tag">Unity 3D</span><span class="proj-tag">C# Physics</span>
                             </div>
@@ -608,7 +602,6 @@
                         </div>
                     </div>
 
-                    <!-- 项目 6: 逆熵重构 -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/Entropy and the Reconstruction of Time.pdf', '_blank')">
                             <video src="assets/particle time distortion.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
@@ -617,10 +610,10 @@
                         <div class="project-info">
                             <div class="proj-meta">
                                 <span class="proj-year">2026</span>
-                                <span class="proj-role" data-i18n="proj6Role">技术美术 / PCG</span>
+                                <span class="proj-role" data-i18n="proj6Role">视觉表现 / PCG</span>
                             </div>
                             <h3 class="proj-title" data-i18n="proj6Title">逆熵重构</h3>
-                            <p class="proj-desc" data-i18n="proj6Desc">程序化物理特效探索。运用 Houdini 进行粒子破坏与时间倒流模拟，增强空间交互中的视觉张力与客观性表现。</p>
+                            <p class="proj-desc" data-i18n="proj6Desc">程序化物理特效实现。运用 Houdini 进行柔体破坏与时间倒流模拟，将复杂的计算逻辑转化为直观的视觉反馈表现。</p>
                             <div class="proj-tags">
                                 <span class="proj-tag">Houdini VFX</span><span class="proj-tag">Tech Art</span>
                             </div>
@@ -630,7 +623,6 @@
                         </div>
                     </div>
 
-                    <!-- 项目 7: 夜雨迷城 -->
                     <div class="editorial-row">
                         <div class="project-media-wrap" onclick="window.open('assets/Realtime Cinematic + Sound Project_Project Description Document.pdf', '_blank')">
                             <video src="assets/Rainday Toronto.mp4" autoplay loop muted playsinline style="object-position: center;"></video>
@@ -639,10 +631,10 @@
                         <div class="project-info">
                             <div class="proj-meta">
                                 <span class="proj-year">2025</span>
-                                <span class="proj-role" data-i18n="proj7Role">场景设计 / UE5</span>
+                                <span class="proj-role" data-i18n="proj7Role">关卡搭建 / UE5</span>
                             </div>
                             <h3 class="proj-title" data-i18n="proj7Title">夜雨迷城</h3>
-                            <p class="proj-desc" data-i18n="proj7Desc">基于 UE5 的场景设计。利用 Niagara 粒子系统实现环境叙事，搭建 Blockout 与实时光影反馈，构建极具电影感的空间场景。</p>
+                            <p class="proj-desc" data-i18n="proj7Desc">基于 UE5 的空间场景搭建。利用 Niagara 粒子系统实现环境渲染，完成 Blockout 与实时光影配置，构建具象化的空间体验。</p>
                             <div class="proj-tags">
                                 <span class="proj-tag">Unreal Engine 5</span><span class="proj-tag">Level Blockout</span>
                             </div>
@@ -655,82 +647,36 @@
                 </div>
             </section>
 
-            <!-- === 平面设计视觉画廊 === -->
-            <section id="design" class="section-block" style="padding-top: 3rem; border-bottom: none;">
-                <div class="section-header" style="justify-content: center; margin-bottom: 2rem;">
-                    <div>
-                        <h2 data-i18n="designTitle" style="text-align: center;">平面与视觉设计</h2>
-                        <span data-i18n="designSub" style="display:block; text-align:center; margin-top:0.5rem; color:var(--text-muted);">海报画廊与视觉传达展示</span>
-                    </div>
-                </div>
-
-                <div class="marquee-container">
-                    <div class="marquee-track">
-                        <div class="marquee-set">
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/WeijunW Vintage Poster.png" onerror="this.src='https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/WeijunW snowglobe.png" onerror="this.src='https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/TGW.jpg" onerror="this.src='https://images.unsplash.com/photo-1549492423-400259a2e574?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/Interstellar poster.jpg" onerror="this.src='https://images.unsplash.com/photo-1627483262268-9c2b5b3290a0?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                        </div>
-                        <div class="marquee-set">
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/WeijunW Vintage Poster.png" onerror="this.src='https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/WeijunW snowglobe.png" onerror="this.src='https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/TGW.jpg" onerror="this.src='https://images.unsplash.com/photo-1549492423-400259a2e574?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                            <div class="marquee-item" onclick="window.open(this.querySelector('img').src, '_blank')">
-                                <img src="assets/Interstellar poster.jpg" onerror="this.src='https://images.unsplash.com/photo-1627483262268-9c2b5b3290a0?q=80&w=800&auto=format&fit=crop'">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 经历、教育与技能 -->
             <section id="experience" class="section-block" style="border-top: 1px solid var(--border-color);">
                 <div class="resume-grid">
                     
-                    <!-- 左侧：技能与核心能力 -->
                     <div class="resume-card">
                         <div class="resume-block" style="margin-bottom: 3rem;">
                             <h3 data-i18n="resumeSkills">核心能力 Core Capabilities</h3>
                             <div class="resume-item">
-                                <h4 style="font-family: var(--font-zh);" data-i18n="skill1">交互与体验设计</h4>
-                                <p class="resume-sub" style="font-weight:normal; color:var(--text-muted); font-size:0.9rem;" data-i18n="skill1Sub">用户体验旅程 (UX)、规则系统搭建、操作心流控制</p>
+                                <h4 style="font-family: var(--font-zh);" data-i18n="skill1">交互与系统设计</h4>
+                                <p class="resume-sub" style="font-weight:normal; color:var(--text-muted); font-size:0.9rem;" data-i18n="skill1Sub">交互逻辑规划、规则系统搭建、操作反馈调优</p>
                             </div>
                             <div class="resume-item">
-                                <h4 style="font-family: var(--font-zh);" data-i18n="skill2">高保真快速原型</h4>
-                                <p class="resume-sub" style="font-weight:normal; color:var(--text-muted); font-size:0.9rem;" data-i18n="skill2Sub">精通运用引擎(Unity/UE)及AI Coding快速验证交互设想</p>
+                                <h4 style="font-family: var(--font-zh);" data-i18n="skill2">技术原型开发</h4>
+                                <p class="resume-sub" style="font-weight:normal; color:var(--text-muted); font-size:0.9rem;" data-i18n="skill2Sub">使用 Unity、UE5 与 C# 快速构建与验证高保真交互原型</p>
                             </div>
                             <div class="resume-item">
-                                <h4 style="font-family: var(--font-zh);" data-i18n="skill3">数字生成与视觉艺术</h4>
-                                <p class="resume-sub" style="font-weight:normal; color:var(--text-muted); font-size:0.9rem;" data-i18n="skill3Sub">算法生成 (PCG)、3D环境叙事与排版布局</p>
+                                <h4 style="font-family: var(--font-zh);" data-i18n="skill3">程序化与视觉呈现</h4>
+                                <p class="resume-sub" style="font-weight:normal; color:var(--text-muted); font-size:0.9rem;" data-i18n="skill3Sub">掌握 Houdini 程序化生成 (PCG)、3D 环境搭建与视觉排版</p>
                             </div>
                         </div>
 
                         <div class="resume-block">
                             <h3 data-i18n="resumeTools">开发工具 Toolset</h3>
                             <p style="font-size:0.9rem; line-height:1.8;">
-                                <strong style="font-family:var(--font-zh);">交互引擎：</strong><br>Unity, Unreal Engine 5, TouchDesigner<br><br>
+                                <strong style="font-family:var(--font-zh);">三维与引擎：</strong><br>Unity, Unreal Engine 5, Houdini, TouchDesigner<br><br>
                                 <strong style="font-family:var(--font-zh);">逻辑开发：</strong><br>C#, C++, Python, JavaScript<br><br>
-                                <strong style="font-family:var(--font-zh);">设计媒介：</strong><br>Adobe CC (Ai, Ps, Pr, Ae), Figma, Houdini，WebGL
+                                <strong style="font-family:var(--font-zh);">设计媒介：</strong><br>Adobe CC (Ai, Ps, Pr, Ae), Figma, WebGL
                             </p>
                         </div>
                     </div>
 
-                    <!-- 右侧：教育、工作与奖项 -->
                     <div class="resume-card">
                         <div class="resume-block" style="margin-bottom: 3rem;">
                             <h3 data-i18n="resumeEdu">教育背景 Education</h3>
@@ -755,7 +701,7 @@
                             <h3 data-i18n="resumeAward">荣誉与认证 Recognition</h3>
                             <div class="resume-item" style="margin-bottom: 1.5rem;">
                                 <h4 style="font-family: var(--font-zh); font-size: 1.1rem; color: var(--text-color);">Level Up Showcase 2026 | 三等奖</h4>
-                                <p style="font-family:var(--font-zh); font-size:0.95rem; color:var(--text-muted);" data-i18n="aw1Desc">安省顶级校园游戏制作竞赛。参与原型设计开发并获奖。</p>
+                                <p style="font-family:var(--font-zh); font-size:0.95rem; color:var(--text-muted);" data-i18n="aw1Desc">安省顶级数字媒体竞赛。参与交互原型《Dust Bunny》设计开发并获奖。</p>
                             </div>
                             <div class="resume-item">
                                 <h4 style="font-family: var(--font-en); font-size: 1.1rem; color: var(--text-color);">Epic Games Design Certificate</h4>
@@ -763,7 +709,6 @@
                             </div>
                         </div>
                         
-                        <!-- 简历下载大按钮 -->
                         <div style="margin-top: 3rem;">
                             <a href="Weijun_Wang_Resume.pdf" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; background: var(--text-color); color: var(--bg-color); padding: 1rem 2rem; border-radius: 999px; text-decoration: none; font-family: var(--font-en); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: transform 0.3s, background 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
                                 <span data-i18n="resumeBtn">下载完整 PDF 简历</span> <i class="ph ph-download-simple" style="font-size: 1.2rem;"></i>
@@ -781,56 +726,53 @@
         </main>
     </div>
 
-    <!-- 交互式视差背景与双语脚本 -->
     <script>
         const translations = {
             zh: {
-                navWork: "作品案例", navDesign: "视觉设计", navAbout: "能力与背景",
+                navWork: "作品案例", navAbout: "能力与背景",
                 title1: "Digital", title2: "Future",
-                subRole1: "交互设计", subRole2: "创意技术", subRole3: "游戏策划",
-                bioText: "你好呀！我是 Weijun，一名跨越数字与物理边界的多学科设计师。具备跨领域的数字媒体创作背景，我擅长将极具表现力的视觉叙事与严谨的用户体验、系统策划相结合。我平时主要在 Unity、Unreal Engine 和 Houdini 中探索系统生成与交互原型。从机制逻辑的白盒搭建，到程序化视觉艺术，我致力于通过前沿技术手段解决复杂的设计挑战，打造沉浸式的数字未来体验。",
+                subRole1: "交互设计", subRole2: "创意技术",
+                bioText: "你好，我是 Weijun，一名交互设计师。我专注于系统生成与交互原型的开发，熟练运用 Unity、Unreal Engine 和 Houdini 进行创作。我的专业能力涵盖从核心机制的白盒搭建、逻辑编写，到程序化视觉的落地实现。我注重用户体验 (UX) 与底层技术架构的结合，能够独立完成从概念设计到高保真原型的完整开发流程。",
                 secProjects: "作品案例",
                 pdfBtn: "查看项目详情",
                 proj1Role: "空间交互 / WebGL", proj1Title: "算法环境界 (Umwelt)", proj1Desc: "构建基于浏览器的实时交互体验。运用 Three.js 与音频频谱分析，将不可见的数据环境转化为可视、可互动的系统界面反馈。",
                 proj2Role: "系统交互 / 战术模拟", proj2Title: "S.T.A.C.S. 战术系统", proj2Desc: "战术博弈游戏原型。包含深度的指挥逻辑与交互系统，重点设计了高密度信息环境下的交互界面与反馈架构。",
                 proj3Role: "算法生成 / 视觉系统", proj3Title: "流光巡径", proj3Desc: "探索数字生命的生长形态。使用 Houdini 研发程序化寻路算法系统，将冰冷的逻辑规则转译为具有高度随机美感的生成艺术。",
-                proj4Role: "3C 体验 / 环境交互", proj4Title: "灰尘精灵", proj4Desc: "以沉浸式叙事为主导的空间探索原型。设计角色 3D 控制器与“吸附”交互机制，精准把控物理反馈与玩家操作预期的匹配度。",
-                proj5Role: "交互原型 / C#开发", proj5Title: "UFO RUN", proj5Desc: "基于 C# 构建的交互物理原型。设计磁力吸收机制与动态收集反馈逻辑，通过持续的交互循环探索玩家在虚拟环境中的操作心流。",
-                proj6Role: "技术美术 / PCG", proj6Title: "逆熵重构", proj6Desc: "程序化物理特效探索。运用 Houdini 进行柔体破坏与时间倒流模拟，增强空间交互中的视觉张力与客观性表现。",
-                proj7Role: "关卡设计 / UE5", proj7Title: "夜雨迷城", proj7Desc: "基于 UE5 的沉浸式关卡设计。利用 Niagara 粒子系统实现环境叙事，搭建 Blockout 与实时光影反馈，构建极具电影感的空间场景。",
-                designTitle: "平面与视觉设计", designSub: "海报画廊与视觉艺术展示",
+                proj4Role: "3C 体验 / 环境交互", proj4Title: "灰尘精灵", proj4Desc: "以空间探索为主导的机制原型。设计角色 3D 控制器与“吸附”交互机制，精准把控物理反馈与玩家操作预期的匹配度。",
+                proj5Role: "交互原型 / C#开发", proj5Title: "UFO RUN", proj5Desc: "基于 C# 构建的交互物理原型。设计磁力吸收机制与动态收集反馈逻辑，通过持续的交互循环验证操作系统的心流体验。",
+                proj6Role: "视觉表现 / PCG", proj6Title: "逆熵重构", proj6Desc: "程序化物理特效实现。运用 Houdini 进行柔体破坏与时间倒流模拟，将复杂的计算逻辑转化为直观的视觉反馈表现。",
+                proj7Role: "关卡搭建 / UE5", proj7Title: "夜雨迷城", proj7Desc: "基于 UE5 的空间场景搭建。利用 Niagara 粒子系统实现环境渲染，完成 Blockout 与实时光影配置，构建具象化的空间体验。",
                 resumeSkills: "核心能力 Core Capabilities",
-                skill1: "交互与体验设计", skill1Sub: "用户体验旅程 (UX)、规则系统搭建、操作心流控制",
-                skill2: "高保真快速原型", skill2Sub: "精通运用引擎(Unity/UE)及代码(C#)快速验证交互设想",
-                skill3: "数字生成与视觉艺术", skill3Sub: "算法生成 (PCG)、3D环境叙事与排版布局",
+                skill1: "交互与系统设计", skill1Sub: "交互逻辑规划、规则系统搭建、操作反馈调优",
+                skill2: "技术原型开发", skill2Sub: "使用 Unity、UE5 与 C# 快速构建与验证高保真交互原型",
+                skill3: "程序化与视觉呈现", skill3Sub: "掌握 Houdini 程序化生成 (PCG)、3D 环境搭建与视觉排版",
                 resumeTools: "开发工具 Toolset",
                 resumeEdu: "教育背景 Education",
                 edu1School: "安大略艺术设计大学 (OCAD U)", edu1Deg: "数字未来 (Digital Futures), 设计学士", edu1Sub: "GPA: 3.3/4 | 专业排名前 20%",
                 edu2School: "乔治布朗学院 (George Brown)", edu2Deg: "平面与数字设计 高级文凭",
                 resumeAward: "荣誉与认证 Recognition",
-                aw1Desc: "安省顶级数字媒体竞赛。参与原型设计开发并获奖。",
+                aw1Desc: "安省顶级数字媒体竞赛。参与交互原型《Dust Bunny》设计开发并获奖。",
                 aw2Desc: "系统覆盖引擎底层逻辑、实时交互设计与 UX/UI 体验规范。",
                 resumeBtn: "下载完整 PDF 简历"
             },
             en: {
-                navWork: "WORKS", navDesign: "VISUALS", navAbout: "ABOUT ME",
+                navWork: "WORKS", navAbout: "ABOUT ME",
                 title1: "Digital", title2: "Future",
-                subRole1: "Interaction Design", subRole2: "Creative Tech", subRole3: "Game Design",
-                bioText: "Hi there! I'm Weijun, a Multidisciplinary Designer bridging the gap between physical spaces and digital realms. I blend highly expressive visual storytelling with rigorous User Experience (UX) and systems design. I spend my time exploring system generation and interactive prototyping across Unity, Unreal Engine, and Houdini. From gray-boxing mechanics to procedural visual arts, I strive to solve complex design challenges and craft immersive experiences for digital futures.",
+                subRole1: "Interaction Design", subRole2: "Creative Tech",
+                bioText: "Hi, I'm Weijun, an Interaction Designer specializing in system generation and interactive prototyping. I am proficient in developing with Unity, Unreal Engine, and Houdini. My capabilities range from gray-boxing and scripting core mechanics to implementing procedural visual arts. I focus on integrating User Experience (UX) with technical architecture, executing complete development cycles from concept to high-fidelity prototypes.",
                 secProjects: "Selected Works",
                 pdfBtn: "VIEW CASE STUDY",
                 proj1Role: "Spatial UX / WebGL", proj1Title: "The Algorithmic Umwelt", proj1Desc: "A real-time browser-based interactive experience. Leveraging Three.js and Web Audio API, transforming invisible data into highly responsive, interactive systemic UI feedback.",
                 proj2Role: "System Design / UI", proj2Title: "S.T.A.C.S.", proj2Desc: "A tactical wargame prototype featuring deep command logic and interactive systems, focusing on multi-dimensional information processing in high-density combat environments.",
-                proj3Role: "Generative Systems", proj3Title: "Pathfinding Mold", proj3Desc: "Exploring the growth morphology of digital life. A procedural pathfinding algorithm developed in Houdini, translating rigid code into fluid, aesthetically generative art.",
-                proj4Role: "3C Experience / Interaction", proj4Title: "Dust Bunny", proj4Desc: "A narrative-driven spatial exploration prototype. Designed custom 3D controllers and 'absorption' mechanics to precisely match physical feedback with player expectations.",
-                proj5Role: "Prototyping / C#", proj5Title: "UFO RUN", proj5Desc: "An interactive physics prototype built with C#. I designed the magnetic absorption mechanics and dynamic feedback loops to explore user flow within virtual environments.",
-                proj6Role: "Tech Art / PCG", proj6Title: "Entropy & Rebirth", proj6Desc: "Procedural physics exploration using Houdini. Simulated soft-body destruction and time reversal to enhance visual tension and objective realism in spatial interactions.",
-                proj7Role: "Level Design / UE5", proj7Title: "Rainy Night Toronto", proj7Desc: "Immersive level blockout in Unreal Engine 5. Utilized Niagara particle systems for environmental storytelling, supported by real-time lighting to build cinematic spatial scenes.",
-                designTitle: "Visual & Graphic Design", designSub: "Poster Gallery & Visual Arts",
+                proj3Role: "Generative Systems", proj3Title: "Flowing Light Pathfinding", proj3Desc: "Exploring the growth morphology of digital life. A procedural pathfinding algorithm developed in Houdini, translating rigid code into fluid, aesthetically generative art.",
+                proj4Role: "3C Experience / Interaction", proj4Title: "Dust Bunny", proj4Desc: "A spatial exploration prototype. Designed custom 3D controllers and 'absorption' mechanics to precisely match physical feedback with player expectations.",
+                proj5Role: "Prototyping / C#", proj5Title: "UFO RUN", proj5Desc: "An interactive physics prototype built with C#. I designed the magnetic absorption mechanics and dynamic feedback loops to validate user flow within virtual environments.",
+                proj6Role: "Tech Art / PCG", proj6Title: "Entropy & Rebirth", proj6Desc: "Procedural physics implementation using Houdini. Simulated soft-body destruction and time reversal to translate complex calculations into intuitive visual feedback.",
+                proj7Role: "Level Blockout / UE5", proj7Title: "Rainy Night Toronto", proj7Desc: "Spatial scene blockout in Unreal Engine 5. Utilized Niagara particle systems for environmental rendering, supported by real-time lighting configurations.",
                 resumeSkills: "Core Capabilities",
-                skill1: "Interaction & System Design", skill1Sub: "User Journey Mapping, Rule Systems, Flow Loop Control",
-                skill2: "High-Fidelity Prototyping", skill2Sub: "Proficient in engines (Unity/UE5) & C# to validate UX concepts",
-                skill3: "Generative & Visual Arts", skill3Sub: "Procedural Generation (PCG), 3D Narrative, Typography",
+                skill1: "Interaction & System Design", skill1Sub: "Interaction logic planning, rule system architecture, feedback tuning",
+                skill2: "Technical Prototyping", skill2Sub: "Rapid prototyping and validation using Unity, UE5, and C#",
+                skill3: "Procedural & Visual Arts", skill3Sub: "Houdini Procedural Generation (PCG), 3D environments, layout design",
                 resumeTools: "Toolset",
                 resumeEdu: "Education",
                 edu1School: "OCAD University | Toronto", edu1Deg: "Bachelor of Design, Digital Futures", edu1Sub: "GPA: 3.3/4 | Top 20%",
@@ -854,16 +796,45 @@
         }
 
         // ===================================================================
-        // ✨ 全局视差粒子画布逻辑 (Parallax Interactive Canvas) ✨
+        // ✨ 抽屉菜单逻辑 (Drawer Menu) ✨
         // ===================================================================
         document.addEventListener("DOMContentLoaded", () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const menuIcon = menuToggle.querySelector('i');
+
+            function toggleMenu() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('open');
+                
+                if (sidebar.classList.contains('open')) {
+                    menuIcon.classList.replace('ph-list', 'ph-x');
+                } else {
+                    menuIcon.classList.replace('ph-x', 'ph-list');
+                }
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (sidebar.classList.contains('open')) toggleMenu();
+                });
+            });
+
+            setLang('zh');
+
+            // ===================================================================
+            // ✨ 全局视差粒子画布逻辑 (Parallax Interactive Canvas) ✨
+            // ===================================================================
             const canvas = document.getElementById('interactive-canvas');
             const ctx = canvas.getContext('2d');
             
             let particles = [];
             let mouse = { x: undefined, y: undefined, radius: 150 };
 
-            // 监听全局鼠标移动
             window.addEventListener('mousemove', function(event) {
                 mouse.x = event.clientX;
                 mouse.y = event.clientY;
@@ -878,7 +849,6 @@
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
                 particles = [];
-                // 确保在各种屏幕大小下有合适的粒子密度
                 const numParticles = window.innerWidth < 768 ? 50 : 120;
                 
                 for (let i = 0; i < numParticles; i++) {
@@ -888,7 +858,6 @@
 
             window.addEventListener('resize', initCanvas);
 
-            // 监听窗口滚动，创造视差位移
             let lastScrollY = window.scrollY;
             window.addEventListener('scroll', () => {
                 let currentScrollY = window.scrollY;
@@ -896,11 +865,9 @@
                 lastScrollY = currentScrollY;
 
                 particles.forEach(p => {
-                    // 粒子随着网页滚动而产生反向位移 (视差效果)
                     p.y -= deltaY * 0.6; 
                     p.baseY -= deltaY * 0.6;
 
-                    // 上下越界时的无限循环包裹
                     if (p.y < -150) {
                         p.y += canvas.height + 300;
                         p.baseY += canvas.height + 300;
@@ -918,7 +885,7 @@
             class Particle {
                 constructor() {
                     this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * (canvas.height + 300) - 150; // 分布更广
+                    this.y = Math.random() * (canvas.height + 300) - 150; 
                     this.size = Math.random() * 2 + 1;
                     this.baseX = this.x;
                     this.baseY = this.y;
@@ -934,11 +901,9 @@
                 }
 
                 update() {
-                    // 粒子自身微小的随机漂浮
                     this.baseX += (Math.random() - 0.5) * 0.5;
                     this.baseY += (Math.random() - 0.5) * 0.5;
 
-                    // 鼠标物理排斥逻辑
                     if (mouse.x !== undefined && mouse.y !== undefined) {
                         let dx = mouse.x - this.x;
                         let dy = mouse.y - this.y;
@@ -954,7 +919,6 @@
                             this.x -= directionX;
                             this.y -= directionY;
                         } else {
-                            // 缓慢恢复原位
                             if (this.x !== this.baseX) {
                                 let dx = this.x - this.baseX;
                                 this.x -= dx / 10;
@@ -965,7 +929,6 @@
                             }
                         }
                     } else {
-                        // 无鼠标时缓慢恢复原位
                         if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 10;
                         if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 10;
                     }
@@ -980,11 +943,9 @@
                         let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
                                      + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
                         
-                        // 若两个粒子距离够近，则连线
                         if (distance < (canvas.width / 10) * (canvas.height / 10)) {
                             opacityValue = 1 - (distance / 10000);
                             
-                            // 检查粒子是否在鼠标作用范围内，如果在，连线变成橘红色高亮
                             let isNearMouse = false;
                             if (mouse.x !== undefined && mouse.y !== undefined) {
                                 let dxMouse = mouse.x - particles[a].x;
@@ -1021,9 +982,6 @@
 
             initCanvas();
             animate();
-            
-            // 初始化语言状态 (默认中文)
-            setLang('zh');
         });
     </script>
 </body>
