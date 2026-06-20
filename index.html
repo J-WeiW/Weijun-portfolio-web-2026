@@ -196,6 +196,26 @@
             justify-content: center;
         }
 
+        /* 名字标签样式 */
+        .hero-name-label {
+            font-family: var(--font-en);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .hero-name-label::before {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
         .hero-title-main {
             font-family: var(--font-en);
             font-weight: 700;
@@ -411,6 +431,8 @@
             .section-header h2 { font-size: 2rem; line-height: 1.2; }
             
             .hero-section { min-height: auto; padding-top: 8rem; justify-content: flex-start;}
+            
+            .hero-name-label { font-size: 0.9rem; } /* 移动端适配名字大小 */
             .hero-title-main { font-size: 3.5rem; margin-bottom: 1.5rem;}
             .hero-roles { font-size: 1.15rem; border-left-width: 3px; padding-left: 1rem; margin-bottom: 1.5rem;}
             .hero-desc { font-size: 1.05rem; padding: 1.2rem;}
@@ -465,6 +487,8 @@
             
             <section class="section-block hero-section">
                 <div class="hero-content-wrapper">
+                    <div class="hero-name-label" data-i18n="heroName">王炜竣 WEIJUN WANG</div>
+
                     <div class="hero-title-main">
                         <span data-i18n="title1">Digital</span><br>
                         <span class="text-stroke" data-i18n="title2">Future</span>
@@ -477,7 +501,7 @@
                     </div>
                     
                     <p class="hero-desc" data-i18n="bioText">
-                        你好，我是 Weijun，一名交互设计师。我专注于 system 生成与交互原型的开发，熟练运用 Unity、Unreal Engine 和 Houdini 进行创作。我的专业能力涵盖从核心机制的白盒搭建、逻辑编写，到程序化视觉的落地实现。我注重用户体验 (UX) 与底层技术架构的结合，能够独立完成从概念设计到高保真原型的完整开发流程。
+                        你好，我是 Weijun，一名交互设计师。我专注于系统生成与交互原型的开发，熟练运用 Unity、Unreal Engine 和 Houdini 进行创作。我的专业能力涵盖从核心机制的白盒搭建、逻辑编写，到程序化视觉的落地实现。我注重用户体验 (UX) 与底层技术架构的结合，能够独立完成从概念设计到高保真原型的完整开发流程。
                     </p>
                 </div>
             </section>
@@ -513,6 +537,27 @@
                                 <span class="proj-tag">UI/UX</span><span class="proj-tag">Three.js</span><span class="proj-tag">Web Audio</span>
                             </div>
                             <a href="assets/The Algorithmic Umwelt.pdf" target="_blank" class="pdf-btn">
+                                <i class="ph ph-file-text"></i> <span data-i18n="pdfBtn">查看项目详情</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="editorial-row">
+                        <div class="project-media-wrap" onclick="window.open('assets/Sonic_Rorschach.mp4', '_blank')">
+                            <video src="assets/Sonic_Rorschach.mp4" autoplay loop muted playsinline></video>
+                            <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
+                        </div>
+                        <div class="project-info">
+                            <div class="proj-meta">
+                                <span class="proj-year">2026</span>
+                                <span class="proj-role" data-i18n="projTDRole">音视觉交互 / TouchDesigner</span>
+                            </div>
+                            <h3 class="proj-title" data-i18n="projTDTitle">声纹罗夏</h3>
+                            <p class="proj-desc" data-i18n="projTDDesc">基于 TouchDesigner 开发的音频可视化交互系统。将实时声波转化为如同罗夏墨迹测试般的动态对称视觉图案，探索听觉与生成艺术的感知映射。</p>
+                            <div class="proj-tags">
+                                <span class="proj-tag">Audio-Visual</span><span class="proj-tag">TouchDesigner</span><span class="proj-tag">Generative Art</span>
+                            </div>
+                            <a href="assets/Sonic_Rorschach.pdf" target="_blank" class="pdf-btn">
                                 <i class="ph ph-file-text"></i> <span data-i18n="pdfBtn">查看项目详情</span>
                             </a>
                         </div>
@@ -618,27 +663,6 @@
                                 <span class="proj-tag">Houdini VFX</span><span class="proj-tag">Tech Art</span>
                             </div>
                             <a href="assets/Entropy and the Reconstruction of Time.pdf" target="_blank" class="pdf-btn">
-                                <i class="ph ph-file-text"></i> <span data-i18n="pdfBtn">查看项目详情</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="editorial-row">
-                        <div class="project-media-wrap" onclick="window.open('assets/Sonic_Rorschach.mp4', '_blank')">
-                            <video src="assets/Sonic_Rorschach.mp4" autoplay loop muted playsinline></video>
-                            <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
-                        </div>
-                        <div class="project-info">
-                            <div class="proj-meta">
-                                <span class="proj-year">2026</span>
-                                <span class="proj-role" data-i18n="projTDRole">音视觉交互 / TouchDesigner</span>
-                            </div>
-                            <h3 class="proj-title" data-i18n="projTDTitle">声纹罗夏</h3>
-                            <p class="proj-desc" data-i18n="projTDDesc">基于 TouchDesigner 开发的音频可视化交互系统。将实时声波转化为如同罗夏墨迹测试般的动态对称视觉图案，探索听觉与生成艺术的感知映射。</p>
-                            <div class="proj-tags">
-                                <span class="proj-tag">Audio-Visual</span><span class="proj-tag">TouchDesigner</span><span class="proj-tag">Generative Art</span>
-                            </div>
-                            <a href="assets/Sonic_Rorschach.pdf" target="_blank" class="pdf-btn">
                                 <i class="ph ph-file-text"></i> <span data-i18n="pdfBtn">查看项目详情</span>
                             </a>
                         </div>
@@ -751,8 +775,9 @@
         const translations = {
             zh: {
                 navWork: "作品案例", navAbout: "能力与背景",
+                heroName: "王炜竣 WEIJUN WANG",
                 title1: "Digital", title2: "Future",
-                subRole1: "交互设计", subRole2: "创意技术",
+                subRole1: "交互设计", subRole2: "创意技术", subRole3: "游戏策划",
                 bioText: "你好，我是 Weijun，一名交互设计师。我专注于系统生成与交互原型的开发，熟练运用 Unity、Unreal Engine 和 Houdini 进行创作。我的专业能力涵盖从核心机制的白盒搭建、逻辑编写，到程序化视觉的落地实现。我注重用户体验 (UX) 与底层技术架构的结合，能够独立完成从概念设计到高保真原型的完整开发流程。",
                 secProjects: "作品案例",
                 pdfBtn: "查看项目详情",
@@ -779,6 +804,7 @@
             },
             en: {
                 navWork: "WORKS", navAbout: "ABOUT ME",
+                heroName: "WEIJUN WANG 王炜竣",
                 title1: "Digital", title2: "Future",
                 subRole1: "Interaction Design", subRole2: "Creative Tech",
                 bioText: "Hi, I'm Weijun, an Interaction Designer specializing in system generation and interactive prototyping. I am proficient in developing with Unity, Unreal Engine, and Houdini. My capabilities range from gray-boxing and scripting core mechanics to implementing procedural visual arts. I focus on integrating User Experience (UX) with technical architecture, executing complete development cycles from concept to high-fidelity prototypes.",
